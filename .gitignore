@@ -2,7 +2,9 @@
 /.classpath
 /.*project
 /*.settings
+/.idea
 /bin
+/*.iml
 
 # Compiled class file
 *.class
