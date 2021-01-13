@@ -12,8 +12,6 @@ Project is created with:
 * Ipsum version: 2.33
 * Ament library version: 999
 	
-## Setup
-To run this project, install it locally using npm:
 # CoreJava
 Programs that covers  various libraries and it's interfaces and implementations like Collection, Multi-Threading,
 Design patterns, Serialization, I/O , Lambda Expressions, Functional Interfaces, Java 8's Stream interface etc.
@@ -24,7 +22,7 @@ To know java language completely you need to encapsulate :
 	3. Classes, inheritance and interfaces
 	4. Exceptions and error handling 
 
-	• Java is a combination of both a Programming language {Syntax, Control flow, Data types and Oops concepts} and a runtime environment {Configuration ,Threading, Security, Input/Output} as well, Here Java SE comprises of only the runtime environment which is very basic type of java
+	*Java is a combination of both a Programming language {Syntax, Control flow, Data types and Oops concepts} and a runtime environment {Configuration ,Threading, Security, Input/Output} as well, Here Java SE comprises of only the runtime environment which is very basic type of java
 	• As a traditional approach, write any java code in a notepad/wordpad and name it as .java file , It needs a host environment to run(windows/linux/android), It needs JDK tools to finally create a java app that is platform independent. This is due to the JRE 
 	• Now, platform is combination of processor and OS(operating system). In general i can say the hardware or software component in which programs run.
 	• We can run NetBeans(<jdk8) , IntelliJ(Supports Android, JAVA SE) or Eclipse
@@ -57,22 +55,19 @@ To know java language completely you need to encapsulate :
 	• In Java, Object gets created in Runtime.
 
 2.1.  Primitive DataTypes
-	
-	• These are the fundamental data types in java and they're built into the language : Integer, float, char, boolean
-	• These integers are again classified into byte(8 bits), short(16), int(32) and long(64) the difference is the size of storage they take. Only when using long, you need to use L at the end of values.
-	• Floating point is classified as float(32 bits) and double(64 bits). Ends with f and d
-	• Char type stores a single Unicode character which is generally represented using '' or \u notation. Boolean types have 2 values 
-	• These primitive types store by value so that it has a separate copy of the allocated variables.
+	* These are the fundamental data types in java and they're built into the language : Integer, float, char, boolean
+	*These integers are again classified into byte(8 bits), short(16), int(32) and long(64) the difference is the size of storage they take. Only when using long, you need to use 		L at the end of values.
+	* Floating point is classified as float(32 bits) and double(64 bits). Ends with f and d
+	* Char type stores a single Unicode character which is generally represented using '' or \u notation. Boolean types have 2 values 
+	* These primitive types store by value so that it has a separate copy of the allocated variables.
 
 2.2. Arithmetic Operations
-
-	• Includes basic operations, along with prefix/postfix and assignment operators. Precedence is given to parenthesis , then to multiplicative and lastly to additive
+	*Includes basic operations, along with prefix/postfix and assignment operators. Precedence is given to parenthesis , then to multiplicative and lastly to additive
 
 2.3. Type Conversions
+	* Here, Type conversions can be implicit(lower to higher) or can automatically be performed by the compiler and Explicit where you need to perform type casting(higher to 		lower)
 
-	• Here, Type conversions can be implicit(lower to higher) or can automatically be performed by the compiler and Explicit where you need to perform type casting(higher to lower)
-
-	3. Conditional Logic/Looping/For-Each/Switch and Arrays
+3.  Conditional Logic/Looping/For-Each/Switch and Arrays
 
 	• Conditional statements need relational operators such as >, <, <=, >=, == to compare two integer values or character Unicode.
 	• Conditional Assignment operator assign a value to a variable based on result of condition, like for example
