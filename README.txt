@@ -11,12 +11,11 @@ To know java language completely you need to encapsulate :
 	• Java is a combination of both a Programming language {Syntax, Control flow, Data types and Oops concepts} and a runtime environment {Configuration ,Threading, Security, Input/Output} as well, Here Java SE comprises of only the runtime environment which is very basic type of java
 	• As a traditional approach, write any java code in a notepad/wordpad and name it as .java file , It needs a host environment to run(windows/linux/android), It needs JDK tools to finally create a java app that is platform independent. This is due to the JRE 
 	• Now, platform is combination of processor and OS(operating system). In general i can say the hardware or software component in which programs run.
-
-	• Javac which is present	• We can run NetBeans(<jdk8) , IntelliJ(Supports Android, JAVA SE) or Eclipse
+	• We can run NetBeans(<jdk8) , IntelliJ(Supports Android, JAVA SE) or Eclipse
 	• Even though you're a developer, but an end-user, You still need a JRE to run java programs. If you go inside JRE folder/ bin folder you can find java.exe that runs java program directly, If you're using intelliJ ,You can find the compiled class file under out->production->.class files
 	• Even without an IDE it is possible to run the java programs, Go to the .class file specified above and type cmd at the top search bar, Inside cmd type java -version and java <ClassName> will execute the output
  outside JRE will compile source code(.java) and converts to byte code, this is done by jdk and path setting.
-	• Interpreter converts Bytecode into machine code(binary code), here interpreter is JVM
+	• Interpreter converts Bytecode(.class files) into machine language(Assembly), here interpreter is JVM
 
 	• Here there is a clear distinction between compiler and interpreter, In C language, there is a source code and there is no interpreter as it directly becomes binary code(.exe file), This .exe is native code which are specific to platforms 
 	• But Intermediate code is ByteCode which are generated after compilation and it requires a VM to execute in a machine ,So that it is not platform specific.
