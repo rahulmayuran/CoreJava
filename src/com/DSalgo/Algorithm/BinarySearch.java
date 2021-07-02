@@ -16,7 +16,7 @@ public class BinarySearch {
 
     public static int binarySearch() {
         int arrayToSearch[] = {12, 22, 10, 9, 18, 19, 20};
-        int target = 2;
+        int target = 19;
 
         int low = 0; //left
         int high = arrayToSearch.length - 1; //right

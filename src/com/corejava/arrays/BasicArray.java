@@ -2,6 +2,10 @@ package com.corejava.arrays;
 
 public class BasicArray {
 
+    private BasicArray() {
+        System.out.println("From Private constructor");
+    }
+
     public static void main(String[] args) {
 
         char[] x = {'I', 'i', 'a', 'm'};
@@ -20,6 +24,7 @@ public class BasicArray {
             //10 = 10 +15 = 25 // 25 =25+20 = 45
         }
         System.out.println("The sum of float array is " + sumOfA);
+        System.out.println(new BasicArray());
 
         //---------------------------------------------------------------
 
