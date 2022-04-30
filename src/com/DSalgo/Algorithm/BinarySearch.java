@@ -7,6 +7,8 @@ by breaking the array into two parts with a mid element,
 1. If mid element is the target element, return it
 2. If target element appears on left, then decrement from mid element
 3. If target element appears on right, then increment from mid element
+
+Visualize it!!
 */
 public class BinarySearch {
 
@@ -24,7 +26,8 @@ public class BinarySearch {
 
         while (low <= high) {
             if (arrayToSearch[mid] == target) { //pos{3} is mid
-                System.out.println("The target element -> " + arrayToSearch[mid] + " is found at position " + mid);
+                System.out.println("The target element -> " + arrayToSearch[mid]
+                        + " is found at position " + mid);
                 return mid;
             } else if (arrayToSearch[mid] < target) {
                 mid = mid - 1;

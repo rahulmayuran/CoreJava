@@ -27,7 +27,7 @@ public class AgeCalc {
     }
 
     //create and add persons List code omitted//
-	   /* List<String> personsNamesList = new ArrayList<>();
+	   /* List<String> personsNamesList = new ArrayListProblem<>();
 	    for (AgeCalc person : persons) {
 	        if (person.isAdult(LocalDate.now())) {
 	            personsNamesList.add(person.getName());

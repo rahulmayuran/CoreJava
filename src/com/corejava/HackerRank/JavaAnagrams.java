@@ -1,4 +1,4 @@
-package com.corejava.Skilltest;
+package com.corejava.HackerRank;
 
 import java.util.Scanner;
 
