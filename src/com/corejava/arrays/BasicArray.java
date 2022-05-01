@@ -9,7 +9,7 @@ public class BasicArray {
     public static void main(String[] args) {
 
         char[] x = {'I', 'i', 'a', 'm'};
-        System.out.println("Concatinating char arrays of " + x[0] + "'" + x[3]);
+        System.out.println("Concatenating char arrays of " + x[0] + "'" + x[3]);
 
         //---------------------------------------------------------------
 
@@ -19,8 +19,8 @@ public class BasicArray {
         a[2] = 20.0f;
 
         float sumOfA = 0.0f;
-        for (int n = 0; n < a.length; n++) {
-            sumOfA += a[n]; // sumOfA = sumOfA + a[0] // 0.0 = 0.0 +10 = 10
+        for (float v : a) {
+            sumOfA += v; // sumOfA = sumOfA + a[0] // 0.0 = 0.0 +10 = 10
             //10 = 10 +15 = 25 // 25 =25+20 = 45
         }
         System.out.println("The sum of float array is " + sumOfA);
