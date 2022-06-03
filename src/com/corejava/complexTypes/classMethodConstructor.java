@@ -1,5 +1,7 @@
 package com.corejava.complexTypes;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 public class classMethodConstructor {
 
     //fields that has a state
@@ -23,14 +25,14 @@ public class classMethodConstructor {
         classMethodConstructor flight1 = new classMethodConstructor();
         classMethodConstructor flight2 = new classMethodConstructor();
         flight1.addPassenger();
-        System.out.println("The amount of passengers for flight1 is " + flight1);
+        commmonLogger.info("The amount of passengers for flight1 is " + flight1);
 
         flight1 = flight2; // flight 1 points to the references of objects of flight 2
-        System.out.println("The amount of passengers for flight1 is " + flight1);
+        commmonLogger.info("The amount of passengers for flight1 is " + flight1);
         flight2.addPassenger();
         flight2.addPassenger();
-        System.out.println("The amount of passengers for flight 2 is " + flight2);
-        System.out.println("The amount of passengers for flight1 is " + flight1);
+        commmonLogger.info("The amount of passengers for flight 2 is " + flight2);
+        commmonLogger.info("The amount of passengers for flight1 is " + flight1);
 
         flight2.floatSum(2.5f, 4.5f, 0);
 
@@ -44,13 +46,13 @@ public class classMethodConstructor {
 
     public void floatSum(float x, float y, int count) {
         if (count < 1) {
-            System.out.println("Returned back as the count is less than 1");
+            commmonLogger.info("Returned back as the count is less than 1");
 
         } else {
 
             float sum = x + y;
             for (int i = 0; i < count; ++i) {
-                System.out.println(sum);
+                commmonLogger.info(String.valueOf(sum));
             }
         }
 

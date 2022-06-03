@@ -1,5 +1,7 @@
 package com.corejava.Skilltest;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 public class Increment {
 
 
@@ -12,7 +14,7 @@ public class Increment {
         int i = 0;
         increment(i);
         ++i;
-        System.out.println(i);
+        commmonLogger.info(String.valueOf(i));
 
     }
 

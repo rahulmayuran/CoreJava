@@ -2,23 +2,25 @@ package com.corejava.arrays;
 
 import java.util.Scanner;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 public class SwitchStatements {
 
     public static void main(String[] args) throws Exception {
 
-        System.out.print("Enter any integer Value :");
+        commmonLogger.info("Enter any integer Value :");
         Scanner a = new Scanner(System.in);
         int i = a.nextInt();
 
         switch (i % 2) {
             case 0:
-                System.out.println(i + " Is even");
+                commmonLogger.info(i + " Is even");
                 break;
             case 1:
-                System.out.println(i + " Is odd");
+                commmonLogger.info(i + " Is odd");
                 break;
             default:
-                System.out.println("Oops it broke");
+                commmonLogger.info("Oops it broke");
                 break;
         }
         a.close();

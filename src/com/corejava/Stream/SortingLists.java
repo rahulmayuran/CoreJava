@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 public class SortingLists
 {
 
@@ -29,15 +31,15 @@ public class SortingLists
     public void sortedList(){
 
 
-        System.out.println("ProductList contains => "+listOfProducts());
+        commmonLogger.info("ProductList contains => "+listOfProducts());
 
         Collections.sort(listOfProducts(), Comparator.comparing(Product::getName));
 
         for(Product p : listOfProducts()){
-            System.out.println("Sorted By Name => "+p);
+            commmonLogger.info("Sorted By Name => "+p);
         }
 
-        System.out.print("Products with price >45k is ");
+        commmonLogger.info("Products with price >45k is ");
         Stream<Product> filteredProducts =
                 listOfProducts()
                         .stream()

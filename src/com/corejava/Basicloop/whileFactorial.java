@@ -1,5 +1,7 @@
 package com.corejava.Basicloop;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 public class whileFactorial {
 
     /*
@@ -16,7 +18,7 @@ public class whileFactorial {
             //again while loop starts because num is still not less than 1,
 
         }
-        System.out.print("Value of 6 factorial is " + factorial);
+        commmonLogger.info("Value of 6 factorial is " + factorial);
     }
 }
 	

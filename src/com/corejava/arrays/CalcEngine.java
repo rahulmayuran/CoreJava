@@ -1,9 +1,15 @@
 package com.corejava.arrays;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.BaseLogger.Logger.commmonLogger;
+
 public class CalcEngine {
 
-//use arrays, for loop, for Each loop, switch statements all at once 
-    // To perform basic arithmetic operations
+//use arrays, for loop, for Each loop, switch statements all at once
+// To perform basic arithmetic operations
 
     public static void main(String[] args) {
 
@@ -25,16 +31,15 @@ public class CalcEngine {
                     results[i] = left[i] * right[i];
                     break;
                 case 'd':
-                    results[i] = left[i] != 0.0d ? left[i] / right[i] : 0.0d;
+                    results[i] = left[i] / right[i];
                     break;
                 default:
-                    System.out.println("Invalid Opcode");
+                    commmonLogger.info("Invalid Opcode");
                     break;
             }
         }
         for (double resultsFor : results) {
-            System.out.print("result : ");
-            System.out.println(resultsFor);
+            commmonLogger.info("result : " + resultsFor + " Map -> ");
         }
     }
 }

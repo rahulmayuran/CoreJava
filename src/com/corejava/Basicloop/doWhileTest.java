@@ -1,5 +1,7 @@
 package com.corejava.Basicloop;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 public class doWhileTest {
 
     //do while also executes the statements in a loop until the condition is satisfied
@@ -9,14 +11,14 @@ public class doWhileTest {
     public static void main(String[] args) {
         int i = 8;
         do {
-            System.out.print(i);
-            System.out.print("  * 4 =");
-            System.out.println(i = i * 4);
+            commmonLogger.info(String.valueOf(i));
+            commmonLogger.info("  * 4 =");
+            commmonLogger.info(String.valueOf(i = i * 4));
 
 
         }
         while (i < 1000);
-        System.out.println("Exited while");
+        commmonLogger.info("Exited while");
 
     }
 

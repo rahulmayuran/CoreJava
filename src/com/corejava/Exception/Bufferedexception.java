@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 public class Bufferedexception {
 
     public static void main(String[] args) throws IOException {
@@ -22,10 +24,10 @@ public class Bufferedexception {
             for (String line = null; (line = reader.readLine()) != null; ) {
                 total += Float.valueOf(line);
             }
-            System.out.println("Total is " + total);
+            commmonLogger.info("Total is " + total);
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            System.out.println(e);
+            commmonLogger.info(e.getLocalizedMessage());
             e.printStackTrace();
         } finally {
             reader.close();

@@ -2,6 +2,8 @@ package com.corejava.HackerRank;
 
 import java.util.Scanner;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 /*If the number is negative, throw an exception , If it is zero, throw an exception
 If they are proper, then print the power of i to n.
 * */
@@ -21,7 +23,7 @@ public class ExceptionHandling {
             throw new Exception("NUMBERS ARE ZERO");
         }
         else{
-            System.out.println(Math.pow(first,second));
+            commmonLogger.info(String.valueOf(Math.pow(first,second)));
         }
     }
 }

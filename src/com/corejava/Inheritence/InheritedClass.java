@@ -1,16 +1,18 @@
 package com.corejava.Inheritence;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 public class InheritedClass extends Inheritance {
 
     int seats = 100;
 
     public InheritedClass(int seats) {
         super(seats);
-        System.out.println("inheritedClass constructer called");
+        commmonLogger.info("inheritedClass constructer called");
     }
 
-    int getSeats() {
-        return 1000;
+    String getSeats() {
+        return "1000";
     }
 
 }

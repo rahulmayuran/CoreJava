@@ -1,5 +1,7 @@
 package com.corejava.Skilltest;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 public class ArmStrongNumber {
 
     public static void main(String[] args) {
@@ -8,15 +10,15 @@ public class ArmStrongNumber {
         temp = n;
         while (n > 0) {
             a = n % 10;
-            System.out.println(a); // 3 , 5 , 1
+            commmonLogger.info(String.valueOf(a)); // 3 , 5 , 1
             n = n / 10;
-            System.out.println(n); // 15 , 1 , 0
+            commmonLogger.info(String.valueOf(n)); // 15 , 1 , 0
             c = c + (a * a * a);
-            System.out.println(c); // 27 , 152(27 + 125) , 153 (27+125+1)
+            commmonLogger.info(String.valueOf(c)); // 27 , 152(27 + 125) , 153 (27+125+1)
         }
         if (temp == c)
-            System.out.println("armstrong number");
+            commmonLogger.info("armstrong number");
         else
-            System.out.println("Not armstrong number");
+            commmonLogger.info("Not armstrong number");
     }
 }

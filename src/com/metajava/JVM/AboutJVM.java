@@ -3,6 +3,8 @@ package com.metajava.JVM;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 /*To see how JVM creates Class type and stores in Heap memory*/
 public class AboutJVM {
 
@@ -11,20 +13,20 @@ public class AboutJVM {
         SampleClass sample = new SampleClass();
 
         Class jvm = sample.getClass();
-        System.out.println("The Super class of JVM object is : "+ jvm.getSuperclass());
-        System.out.println("The Class of JVM object is : "+ jvm.getName());
+        commmonLogger.info("The Super class of JVM object is : "+ jvm.getSuperclass());
+        commmonLogger.info("The Class of JVM object is : "+ jvm.getName());
 
         /*To print all the methods*/
         Method[] methods = jvm.getDeclaredMethods();
         for(Method m : methods){
-            System.out.println("All methods inside Sample class is " + m);
+            commmonLogger.info("All methods inside Sample class is " + m);
         }
 
         /*To print all the fields*/
         Field [] fields = jvm.getDeclaredFields();
         for (Field f:
              fields) {
-            System.out.println("All the fields of Sample class are " + f);
+            commmonLogger.info("All the fields of Sample class are " + f);
         }
 
     }

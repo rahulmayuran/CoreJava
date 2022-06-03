@@ -1,5 +1,7 @@
 package com.DSalgo;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 /*Time Complexity - The time taken to execute the lines of code, How much
 time does it take to run the function largely depends on the speed of your
 RAM and the programming language that you use.
@@ -26,13 +28,12 @@ public class BigONotation {
         int[] intArray = {5,3,6,4,2,1,5,6,4,9}; //O(1) - constant time
 
         for(int i=0;i<intArray.length;++i){//O(N)
-            System.out.println("Value of array elements :" + intArray[i]); //O(1)
+            commmonLogger.info("Value of array elements :" + intArray[i]); //O(1)
         }
         int total=0; //O(1)
         for (int jArr:intArray) {//O(N) - Linear time X = aN+ b
             total += jArr; //O(1)
-            System.out.println("From foreach loop " + jArr + " With" +
-                    " a summing of :"+total ); //O(1)
+            commmonLogger.info("From foreach loop " + jArr + " With a summing of :"+total ); //O(1)
         }
 
         int[][] twoDArr = {{1,2,3},
@@ -43,11 +44,11 @@ public class BigONotation {
         for (int oneD[]: twoDArr) {
             for(int zeroD : oneD){ //O(N^2) - Quadratic time[X = aN^2 = bN + c]
                 d2total += zeroD;
-                System.out.println("Inside 2nd ForL, The sum of 2-D array is : " + d2total );
+                commmonLogger.info("Inside 2nd ForL, The sum of 2-D array is : " + d2total );
             }
-            System.out.println("Inside 1st forL, The sum of 2-D array is : " + d2total );
+            commmonLogger.info("Inside 1st forL, The sum of 2-D array is : " + d2total );
         }
-        System.out.println("Outside forL, The sum of 2-D array is : " + d2total );
+        commmonLogger.info("Outside forL, The sum of 2-D array is : " + d2total );
     }
 
 }

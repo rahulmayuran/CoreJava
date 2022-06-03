@@ -2,6 +2,8 @@ package com.DSalgo.PluralSight.Stacks;
 
 import java.util.Scanner;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 /*This class goes along with the DS_Stack class
 * It is an implementation of the Stack operations with an example of Deck of Cards
 *
@@ -28,21 +30,21 @@ public class CardStackApp {
         //Restack Cards
         cards.stackCards();
 
-        System.out.print("Total Cards in the deck -> ");
+        commmonLogger.info("Total Cards in the deck -> ");
         cards.deckSize();
 
-        System.out.println("Does the deck have Ace of Spades? -> ");
+        commmonLogger.info("Does the deck have Ace of Spades? -> ");
         cards.containsCard("Ace of Spades");
-        System.out.println("Does the deck have a Joker? -> ");
+        commmonLogger.info("Does the deck have a Joker? -> ");
         cards.containsCard("Joker");
 
         Scanner scan = new Scanner(System.in);
 
-            System.out.println("Enter the card to access");
+            commmonLogger.info("Enter the card to access");
             String cardToAccess = scan.nextLine();
             cards.goToCard(cardToAccess);
 
-        System.out.print("Remaining Cards in the deck -> ");
+        commmonLogger.info("Remaining Cards in the deck -> ");
         cards.deckSize();
     }
 
@@ -111,25 +113,22 @@ public class CardStackApp {
     private void unstackCards() {
 
         //Pull out the cards from the stack and print them
-        if(stack.size()==0){
-            throw new IllegalArgumentException("There are no cards to Pop in the stack");
-        }
-        while (stack.size()>0)
+        while (!stack.size().isEmpty())
         {
-            System.out.println(stack.pop());
+            commmonLogger.info(stack.pop());
         }
     }
 
     private void deckSize() {
-        System.out.println(stack.size());
+        commmonLogger.info(stack.size());
     }
 
     private void containsCard(String cardToCheck) {
-        System.out.println(stack.contains(cardToCheck));
+        commmonLogger.info(stack.contains(cardToCheck));
     }
 
     private void goToCard(String cardToAccess) {
-        System.out.println(stack.access(cardToAccess));
+        commmonLogger.info(stack.access(cardToAccess));
     }
 
 }

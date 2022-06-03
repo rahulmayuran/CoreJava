@@ -2,6 +2,8 @@ package com.corejava.Stream;
 
 import java.util.stream.Stream;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 public class forEachplay {
 
     /*
@@ -16,7 +18,7 @@ public class forEachplay {
                 .filter(s -> s.startsWith("b"))
                 .sorted()
                 .map(String::toUpperCase)
-                .forEach(s -> System.out.println("forEach: " + s));
+                .forEach(s -> commmonLogger.info("forEach: " + s));
     }
 
 }

@@ -3,7 +3,7 @@
 * [Technologies](#technologies)
 
 ## General info
-Contains programs with core java concepts like Multithreading, I/O , Serialization, Basic OOPS concepts, Collection , Map , Stream API, functional interfaces and Lambda expressions
+Java 8 concepts
 	
 ## Technologies
 Project is created with:

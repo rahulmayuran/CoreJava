@@ -1,17 +1,17 @@
 package com.corejava.arrays;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 public class BasicArray {
 
     private BasicArray() {
-        System.out.println("From Private constructor");
+        commmonLogger.info("From Private constructor");
     }
 
     public static void main(String[] args) {
 
         char[] x = {'I', 'i', 'a', 'm'};
-        System.out.println("Concatenating char arrays of " + x[0] + "'" + x[3]);
-
-        //---------------------------------------------------------------
+        commmonLogger.info("Concatenating char arrays of " + x[0] + "'" + x[3]);
 
         float[] a = new float[3];
         a[0] = 10.0f;
@@ -20,18 +20,8 @@ public class BasicArray {
 
         float sumOfA = 0.0f;
         for (float v : a) {
-            sumOfA += v; // sumOfA = sumOfA + a[0] // 0.0 = 0.0 +10 = 10
-            //10 = 10 +15 = 25 // 25 =25+20 = 45
+            sumOfA += v;
         }
-        System.out.println("The sum of float array is " + sumOfA);
-        System.out.println(new BasicArray());
-
-        //---------------------------------------------------------------
-
-        float sumforEachofA = 0;
-        for (float forEach : a) {
-            sumforEachofA += forEach;
-        }
-        System.out.println("The sum of float array using forEach is " + sumforEachofA);
+        commmonLogger.info("The sum of float array is " + sumOfA);
     }
 }

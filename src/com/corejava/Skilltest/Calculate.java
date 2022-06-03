@@ -1,5 +1,7 @@
 package com.corejava.Skilltest;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 public class Calculate {
 
     /*
@@ -15,11 +17,11 @@ public class Calculate {
 
             int result = divide(3, 0);
 
-            System.out.println(result + "<- result ");
+            commmonLogger.info(result + "<- result ");
         } catch (ArithmeticException e) {
-            System.out.println("Caught ArithmeticException");
+            commmonLogger.info("Caught ArithmeticException");
         } catch (IllegalArgumentException e) {
-            System.out.println("Caught IllegalArgumentException");
+            commmonLogger.info("Caught IllegalArgumentException");
         }
 
     }
@@ -29,10 +31,10 @@ public class Calculate {
         try {
             return x / y;
         } catch (ArithmeticException e) {
-            System.out.println("Div by zero");
+            commmonLogger.info("Div by zero");
             throw new IllegalArgumentException();
         } finally {
-            System.out.println("Finally");
+            commmonLogger.info("Finally");
         }
     }
 }

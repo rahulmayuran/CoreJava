@@ -1,5 +1,7 @@
 package com.DSalgo.PluralSight.Queues;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 public class SnowBirdLiftApp {
 
     DS_Queue<SnowyLift> birdQueuelifter = new DS_Queue<SnowyLift>();
@@ -15,18 +17,18 @@ public class SnowBirdLiftApp {
     private void runlift()
     {
         //Print the lift size
-        System.out.println(birdQueuelifter.size());
+        commmonLogger.info(String.valueOf(birdQueuelifter.size()));
 
         loadLift();
 
         //Print the lift size
-        System.out.println(birdQueuelifter.size());
+        commmonLogger.info(String.valueOf(birdQueuelifter.size()));
 
         //Does the lift contain the skiers Rahul and Bala
-        System.out.println(birdQueuelifter.contains(new SnowyLift("Rahul","Bala")));
+        commmonLogger.info(birdQueuelifter.contains(new SnowyLift("Rahul","Bala")));
 
         //Who's at the 2nd position - It is 0 based index
-        System.out.println("2nd Lift has "+ birdQueuelifter.access(1).listLiftRaiders());
+        commmonLogger.info("2nd Lift has "+ birdQueuelifter.access(1).listLiftRaiders());
 
         unloadLift();
 
@@ -34,7 +36,7 @@ public class SnowBirdLiftApp {
         try {
             unloadLift();
         } catch (IllegalArgumentException e) {
-            System.out.println("The lift is already empty, Whom you're trying to unload "+e.getMessage());
+            commmonLogger.info("The lift is already empty, Whom you're trying to unload "+e.getMessage());
         }
     }
 
@@ -60,27 +62,27 @@ public class SnowBirdLiftApp {
         SnowyLift lift = birdQueuelifter.deQueue();
 
         //Should be Prasad and Rajesh
-        System.out.println(lift.listLiftRaiders());
+        commmonLogger.info(lift.listLiftRaiders());
 
         lift = birdQueuelifter.deQueue();
 
         //Should be Pammi and Deepika
-        System.out.println(lift.listLiftRaiders());
+        commmonLogger.info(lift.listLiftRaiders());
 
         lift = birdQueuelifter.deQueue();
 
         //Should be Shashank and Ravi
-        System.out.println(lift.listLiftRaiders());
+        commmonLogger.info(lift.listLiftRaiders());
 
         lift = birdQueuelifter.deQueue();
 
         //Should be Rahul and Bala
-        System.out.println(lift.listLiftRaiders());
+        commmonLogger.info(lift.listLiftRaiders());
 
         lift = birdQueuelifter.deQueue();
 
         //Should be Dhanus and Baskar
-        System.out.println(lift.listLiftRaiders());
+        commmonLogger.info(lift.listLiftRaiders());
     }
 
     //Creating the generics with two strings, a parameterized constructor

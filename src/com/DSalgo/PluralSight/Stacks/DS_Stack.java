@@ -41,7 +41,7 @@ public class DS_Stack<X> {
     }
 
     //CONTAINS Operation takes O(n)
-    public boolean contains(X itemToCheck){
+    public String contains(X itemToCheck){
         boolean found = false;
 
         for (int i = 0; i < stackPointer; i++) {
@@ -49,7 +49,7 @@ public class DS_Stack<X> {
                 found = true;
             break;
         }
-        return found;
+        return String.valueOf(found);
     }
 
     //ACCESS operation takes O(n)
@@ -65,7 +65,7 @@ public class DS_Stack<X> {
     }
 
     //SIZE Operation takes O(1)
-    public int size(){
-        return stackPointer;
+    public String size(){
+        return String.valueOf(stackPointer);
     }
 }

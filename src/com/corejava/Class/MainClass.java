@@ -1,5 +1,7 @@
 package com.corejava.Class;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 public class MainClass {
 
     public static void main(String args[]) {
@@ -9,15 +11,15 @@ public class MainClass {
     }
 
     public static void main(int i) {
-        System.out.println("Overloaded main()" + i);
+        commmonLogger.info("Overloaded main()" + i);
     }
 
     public static void main(char i) {
-        System.out.println("Overloaded main()" + i);
+        commmonLogger.info("Overloaded main()" + i);
     }
 
     public static void main(String str) {
-        System.out.println("Overloaded main()" + str);
+        commmonLogger.info("Overloaded main()" + str);
     }
 
 }

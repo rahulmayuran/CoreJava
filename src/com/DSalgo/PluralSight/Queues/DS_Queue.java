@@ -89,12 +89,12 @@ public class DS_Queue<X> {
         return item;
     }
 
-    public boolean contains(X item){
+    public String contains(X item){
 
         boolean itemFound = false;
 
         if(size()==0){
-            return itemFound;
+            return String.valueOf(itemFound);
         }
 
         //As it is a Queue, Let's assume there are n elements in between
@@ -106,7 +106,7 @@ public class DS_Queue<X> {
                 break;
             }
         }
-        return itemFound;
+        return String.valueOf(itemFound);
     }
 
     public X access(int position)

@@ -8,6 +8,8 @@ package com.corejava.FinalClass;
  */
 
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 public class FinalClass {
 
     private static final int NOT_YET = 9;
@@ -16,8 +18,8 @@ public class FinalClass {
 
 
     public FinalClass() {
-        System.out.println("I will be second From Constructor ->" + accountNo);
-        System.out.println("I will be third From Constructor accessing final variable ->" + ifscCode);
+        commmonLogger.info("I will be second From Constructor ->" + accountNo);
+        commmonLogger.info("I will be third From Constructor accessing final variable ->" + ifscCode);
         //will be printed second , As JVM prints statements from main method
     }
 
@@ -41,10 +43,10 @@ public class FinalClass {
     public FinalClass(int accountNo, int ifscCode, int NOT_YET) {
         this.accountNo = accountNo;
         ifscCode = 200003;
-        System.out.println("I will be fourth , printing new value of IFSC code as I'm final " +
+        commmonLogger.info("I will be fourth , printing new value of IFSC code as I'm final " +
                 ifscCode);
         NOT_YET = 8;
-        System.out.println("I will be 5th , to modify the static final field " + NOT_YET);
+        commmonLogger.info("I will be 5th , to modify the static final field " + NOT_YET);
         //this.ifscCode = ifscCode;
 
         /*
@@ -56,7 +58,7 @@ public class FinalClass {
 
     public static void main(String[] args) {
 
-        System.out.println("I will be the first statement from JVM");
+        commmonLogger.info("I will be the first statement from JVM");
         /*
          * We have private variables in the non-static class They are assigned some
          * value and you need to print it So, main method is static and needs an object
@@ -68,15 +70,15 @@ public class FinalClass {
         FinalClass fcAcc = new FinalClass(777); // instantiating constructor with 1 param
         FinalClass fcAcc2 = new FinalClass(247234, 287492, 7); // instantiating constr with 2 params
 
-        System.out.println("I will be 6th From main method ->" + fc.accountNo);
+        commmonLogger.info("I will be 6th From main method ->" + fc.accountNo);
 
-        System.out.println("I will be 7th From main method , with 1 parameterized const ->" +
+        commmonLogger.info("I will be 7th From main method , with 1 parameterized const ->" +
                 fcAcc.accountNo);
         /*
          * here, this. pointer will change the field value defined at top by replacing with
          * the instantiating value, if i want the same accountNo as in fields, remove this pointer.
          */
-        System.out.println("I will be 8th with 3 parameterized const ->" +
+        commmonLogger.info("I will be 8th with 3 parameterized const ->" +
                 "IFSC ->" + fcAcc2.ifscCode +
                 " and Acc No ->" + fcAcc2.accountNo + " Static Final variable " + fcAcc2.NOT_YET);
         /*
@@ -84,7 +86,7 @@ public class FinalClass {
          * value provided while instantiating and this can't be done with IFSC as it is
          * final
          */
-        System.out.println("I'm 9th and can directly be printed and can't be instantiated " + NOT_YET);
+        commmonLogger.info("I'm 9th and can directly be printed and can't be instantiated " + NOT_YET);
     }
 
 }

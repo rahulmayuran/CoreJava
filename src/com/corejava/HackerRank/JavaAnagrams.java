@@ -2,6 +2,8 @@ package com.corejava.HackerRank;
 
 import java.util.Scanner;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 /* A Hacker Rank skill test to find whether the given two strings are anagrams are not?
 
 Input : Cat, Tea                Output : Not Anagrams
@@ -13,14 +15,14 @@ public class JavaAnagrams
     {
         Scanner input = new Scanner(System.in);
 
-        System.out.println("Enter the first String -> ");
+        commmonLogger.info("Enter the first String -> ");
         String str1 = input.next();
-        System.out.println("Enter the second String -> ");
+        commmonLogger.info("Enter the second String -> ");
         String str2 = input.next();
 
         input.close();
         boolean result = isAnagram(str1,str2);
-        System.out.println((result)?"ANAGRAMS":"NOT ANAGRAMS");
+        commmonLogger.info((result)?"ANAGRAMS":"NOT ANAGRAMS");
     }
 
     private static boolean isAnagram(String one, String two)

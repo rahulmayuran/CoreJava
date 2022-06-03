@@ -1,5 +1,7 @@
 package com.corejava.Class;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 public class Flight {
 
     int flightNumber;
@@ -15,16 +17,16 @@ public class Flight {
         j = k; //j becomes 10 as k references i is 10
         //k.setFlightNumber(i.getFlightNumber());
         //If the line is uncommented, the output will be 20/20/20
-        System.out.println("i-> " + i + "j-> " + j + "k-> " + k);
+        commmonLogger.info("i-> " + i + "j-> " + j + "k-> " + k);
     }
 
     public static void main(String[] args) {
         Flight f1 = new Flight(10);
         Flight f2 = new Flight(20);
         //Here f1 and f2 allocates memory to Flight objects with values 10 & 20
-        System.out.println("Flight1 ->" + f1);
-        System.out.println("Flight2 ->" + f2);
-        //System.out.println('j'�+�'a'�+�'v'�+�'a');
+        commmonLogger.info("Flight1 ->" + f1);
+        commmonLogger.info("Flight2 ->" + f2);
+        //commmonLogger.info('j'�+�'a'�+�'v'�+�'a');
 
         swap(f1, f2);
     }

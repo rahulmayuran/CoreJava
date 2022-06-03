@@ -1,5 +1,7 @@
 package com.DSalgo.Algorithm;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 /*
 Efficient way of searching the target element in the array of elements
 by breaking the array into two parts with a mid element,
@@ -17,7 +19,7 @@ public class BinarySearch {
     }
 
     public static int binarySearch() {
-        int arrayToSearch[] = {12, 22, 10, 9, 18, 19, 20};
+        int[] arrayToSearch = {12, 22, 10, 9, 18, 19, 20};
         int target = 19;
 
         int low = 0; //left
@@ -26,7 +28,7 @@ public class BinarySearch {
 
         while (low <= high) {
             if (arrayToSearch[mid] == target) { //pos{3} is mid
-                System.out.println("The target element -> " + arrayToSearch[mid]
+                commmonLogger.info("The target element -> " + arrayToSearch[mid]
                         + " is found at position " + mid);
                 return mid;
             } else if (arrayToSearch[mid] < target) {

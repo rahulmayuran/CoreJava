@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
+import static com.BaseLogger.Logger.commmonLogger;
+
 /*
 * 'n' number of lines have 0 or more integers, 'd' denotes number of integers
 * 'q' denotes number of queries, Each query consists of x and y.
@@ -33,9 +35,9 @@ public class ArrayListProblem
                     .limit(scan.nextInt())
                     .forEach(n -> {
                 try {
-                    System.out.println(matrix.get(scan.nextInt() - 1).get(scan.nextInt() - 1));
+                    commmonLogger.info(String.valueOf(matrix.get(scan.nextInt() - 1).get(scan.nextInt() - 1)));
                 } catch (Exception ex) {
-                    System.out.println("ERROR!");
+                    commmonLogger.info("ERROR!");
                 }
             });
         }

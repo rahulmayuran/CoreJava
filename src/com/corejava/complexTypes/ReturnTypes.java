@@ -1,19 +1,20 @@
 package com.corejava.complexTypes;
 
-public class ReturnTypes {
+import static com.BaseLogger.Logger.commmonLogger;
 
-    private int x = 12;
-    private int y = 15;
+public class ReturnTypes {
 
     public static void main(String[] args) {
 
         ReturnTypes sum = new ReturnTypes();
-        System.out.println(sum.sumOf());
+        commmonLogger.info(sum.sumOf());
     }
 
-    public boolean sumOf() {
+    private String sumOf() {
         int total = 18;
-        return total < x + y;
+        int x = 12;
+        int y = 15;
+        return "total < x + y";
     }
 
 }
