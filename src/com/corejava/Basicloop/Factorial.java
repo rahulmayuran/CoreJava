@@ -2,7 +2,7 @@ package com.corejava.Basicloop;
 
 import static com.BaseLogger.Logger.commmonLogger;
 
-public class whileFactorial {
+public class Factorial {
 
     /*
      * while loop repeatedly executes the statements unless the condition is
@@ -19,6 +19,20 @@ public class whileFactorial {
 
         }
         commmonLogger.info("Value of 6 factorial is " + factorial);
+
+        Factorial ins = new Factorial();
+        commmonLogger.info("Value of recursive factorial is " + ins.fact(5));
+    }
+
+    // Recursive Function of factorial
+    private int fact(int a){
+        if(a<0) {
+            return 0;
+        }else if(a==0){
+            return 1;
+        } else {
+            return a * fact(a - 1);
+        }
     }
 }
 	

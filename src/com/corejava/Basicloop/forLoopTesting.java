@@ -19,11 +19,7 @@ public class forLoopTesting {
         commmonLogger.info("Inside main method + i->" + i + " and j ->" + j);
     }
 
-    public static int squareMethod(int a) {
-        int c = a;
-        c = c * c;
-        a = c;
-
-        return a;
+    public static double squareMethod(int a) {
+        return Math.pow(a, 2d);
     }
 }
