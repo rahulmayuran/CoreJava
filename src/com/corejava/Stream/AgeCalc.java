@@ -7,7 +7,7 @@ public class AgeCalc {
     private LocalDate birthDate;
     private String name;
 
-    public boolean isAdult(LocalDate when) {
+    public boolean isAdult() {
         LocalDate now = LocalDate.now();
         Period age = Period.between(birthDate, now);
         Period adult = Period.ofYears(18);
