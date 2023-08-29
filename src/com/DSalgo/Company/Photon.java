@@ -1,4 +1,4 @@
-package com.DSalgo;
+package com.DSalgo.Company;
 
 import java.util.Arrays;
 import java.util.Comparator;

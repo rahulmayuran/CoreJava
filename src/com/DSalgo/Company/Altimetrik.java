@@ -1,4 +1,4 @@
-package com.DSalgo.Algorithm;
+package com.DSalgo.Company;
 
 public class Altimetrik {
 
