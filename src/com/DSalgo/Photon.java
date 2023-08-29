@@ -44,17 +44,26 @@ public class Photon {
             e.setName(sortedNames.get(i));
             i++;
         }
+        System.out.println("End result after replacing names -> " + employees);
 
-        System.out.println("End result -> " + employees);
+        /**
+         * What is the purpose of Optional final class
+         */
+        System.out.println("Optional check ->" + optionalEmployee(Optional.of(new Employee(11, "Some", 24, 242345))));
+        System.out.println("Optional check empty object ->" + optionalEmployee(Optional.of(new Employee())));
+        System.out.println("Optional check null ->" + optionalEmployee(Optional.empty()));
+
 
     }
 
-    public Optional<Employee> getEmpl() {
-        Optional<Employee> o = Optional.of(new Employee());
-        if (o.isPresent()) {
-            return o;
+    public static Optional<Employee> optionalEmployee(Optional<Employee> o) {
+        System.out.println();
+        if(o.isPresent()){
+            System.out.println("Employee object detected");
+        } else {
+            System.out.println("No Employee object found");
         }
-        return Optional.of(new Employee());
+        return o;
     }
 }
 
