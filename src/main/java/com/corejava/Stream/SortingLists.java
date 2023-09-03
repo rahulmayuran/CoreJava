@@ -2,10 +2,8 @@ package com.corejava.Stream;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -34,19 +32,21 @@ public class SortingLists
 
         log.info("ProductList contains => "+listOfProducts());
 
-        Collections.sort(listOfProducts(), Comparator.comparing(Product::getName));
+        listOfProducts().sort(Comparator.comparing(Product::getName));
 
         for(Product p : listOfProducts()){
             log.info("Sorted By Name => "+p);
         }
 
-        log.info("Products with price >45k is ");
-        Stream<Product> filteredProducts =
+        log.info("Products with price > 45k is ");
+
+//        The first product ranging more than 45k
+        Optional<Product> filteredProducts =
                 listOfProducts()
                         .stream()
-                        .filter(p->p.getPrice() >45000);
+                        .filter(p->p.getPrice() >45000).findFirst();
 
-        filteredProducts.forEach(System.out::println);
+        log.info("Stream of Filtered products" + (filteredProducts.isPresent() ? filteredProducts.get() : Optional.empty()));
 
     }
 
