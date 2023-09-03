@@ -25,12 +25,13 @@ public class Intermediate {
      * @param array
      */
     private void iterateArrayTwice(int[] array) {
-        int sum = 0, product = 1;
-        for (int i = 0; i < array.length; i++) {
-            sum += array[i];
+        int sum = 0;
+        int product = 1;
+        for (int k : array) {
+            sum += k;
         }
-        for (int i = 0; i < array.length; i++) {
-            product *= array[i];
+        for (int j : array) {
+            product *= j;
         }
         loghelper.info("sum is " + sum + ", product is " + product);
     }
