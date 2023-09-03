@@ -38,15 +38,22 @@ public class SortingLists
             log.info("Sorted By Name => "+p);
         }
 
-        log.info("Products with price > 45k is ");
+        List<String> pdtList = listOfProducts()
+                .stream()
+                .filter(p -> p.getPrice() > 40000)
+                .map(Product::getName)
+                .collect(Collectors.toList());
+
+        log.info("Products with price > 40k is {}", pdtList);
 
 //        The first product ranging more than 45k
         Optional<Product> filteredProducts =
                 listOfProducts()
                         .stream()
-                        .filter(p->p.getPrice() >45000).findFirst();
+                        .filter(p -> p.getPrice() > 40000)
+                        .findFirst();
 
-        log.info("Stream of Filtered products" + (filteredProducts.isPresent() ? filteredProducts.get() : Optional.empty()));
+        log.info("First Product with price more than 45k " + (filteredProducts.isPresent() ? filteredProducts.get() : Optional.empty()));
 
     }
 
