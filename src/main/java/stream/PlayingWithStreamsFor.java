@@ -2,10 +2,7 @@ package stream;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -29,23 +26,29 @@ public class PlayingWithStreamsFor {
                 capitalizeLetter(Arrays.asList("becky99", "becky11", "beethoven11", "beepBeep1", "BangaloreDays43"))
         );
 
-        log.info("Collective map with 1 key and 1 value:{}",
+        log.info("Grouped and Capitalized Sorted Strings = {}",
                 capitalizedGroupedLetters(Arrays.asList("becky99", "becky11", "beethoven11", "beepBeep1", "BangaloreDays43"))
         );
     }
 
     protected static Map<Integer, List<String>> capitalizeLetter(List<String> input){
-        return input.stream()
+
+        Map<Integer, List<String>> result = input.stream()
                 .filter(e -> e.startsWith("b"))
                 .sorted()
                 .map(String::toUpperCase)
                 .collect(Collectors.groupingBy(String::length, Collectors.toList()));
+
+        log.info("Map has the keys as :{}, with values:{}", result.keySet(), result.values());
+        return result;
     }
 
     protected static Map<Integer, List<String>> capitalizedGroupedLetters(List<String> input){
-        return Collections.singletonMap(
+        Map<Integer, List<String>> result = Collections.singletonMap(
                 (int) getStreams(input).count(), getStreams(input).collect(Collectors.toList())
         );
+        log.info("Map has the keys as :{}, with values:{}", result.keySet(), result.values());
+        return result;
     }
 
     private static Stream<String> getStreams(List<String> stringStream){
