@@ -1,4 +1,4 @@
-package com.corejava.Stream;
+package stream;
 
 import java.time.LocalDate;
 import java.time.Period;

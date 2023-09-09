@@ -1,4 +1,4 @@
-package com.corejava.Stream;
+package modal;
 
 public class Person {
 

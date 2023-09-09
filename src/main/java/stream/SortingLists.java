@@ -1,4 +1,6 @@
-package com.corejava.Stream;
+package stream;
+
+import modal.Product;
 
 import java.util.ArrayList;
 import java.util.Collections;

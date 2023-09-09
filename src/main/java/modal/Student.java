@@ -1,4 +1,4 @@
-package com.corejava.Stream;
+package modal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public class Student {
 
     public static void main(String[] args) {
 
-        final List<Student> students = new ArrayList<Student>();
+        final List<Student> students = new ArrayList<>();
 
         students.stream()
                 .filter(s -> s.getName().startsWith("J"))
