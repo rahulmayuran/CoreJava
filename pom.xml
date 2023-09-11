@@ -9,29 +9,78 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <java.version>1.8</java.version>
+        <guava.version>32.1.2-jre</guava.version>
+        <j.assert.version>3.24.2</j.assert.version>
+        <junit.version>5.9.1</junit.version>
+        <gson.version>2.10.1</gson.version>
+        <commons-io.version>2.13.0</commons-io.version>
     </properties>
 
     <dependencies>
+
+<!-- JUnit 5 is the next generation of JUnit.
+The goal is to create an up-to-date foundation for developer-side testing on the JVM-->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+<!--        https://github.com/google/guava
+Guava is a set of core Java libraries from Google that includes new collection types
+(such as multimap and multiset), immutable collections, a graph library, and
+utilities for concurrency, I/O, hashing, primitives, strings, and more!
+It is widely used on most Java projects within Google, and widely used by many other companies as well-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+
+<!-- An opensource community-driven library used for writing fluent and rich assertions in Java tests.-->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${j.assert.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+<!-- https://github.com/google/gson
+Gson is a Java library that can be used to convert Java Objects into their JSON representation.
+It can also be used to convert a JSON string to an equivalent Java object.
+Gson can work with arbitrary Java objects including pre-existing objects that you do not have source-code of.-->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
+        </dependency>
+
+<!-- Apache Commons IO library provides various utility classes for common operations for File IO covering
+ wide range of use cases. It helps avoid writing boilerplate code.-->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+        </dependency>
+
+<!-- To reduce boilerplate code and replace with annotations-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.26</version>
         </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>2.0.6</version>
         </dependency>
-
-        <!-- SLF4J Provider -->
+<!-- SLF4J Provider -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>2.0.6</version>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -41,8 +90,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <source>16</source>
+                    <target>16</target>
                 </configuration>
             </plugin>
         </plugins>

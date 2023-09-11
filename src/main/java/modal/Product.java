@@ -34,13 +34,13 @@ public class Product {
     public static List<Product> listOfProducts() {
         return Arrays.asList(
                 new Product(1, "Nokia G21", 23200, Product.setPriceRange(23200),
-                        Arrays.asList("4GB Ram", "OctaCore Processor", "256GB Memory", "18MP/8MP")),
+                        List.of("4GB Ram", "OctaCore Processor", "256GB Memory", "18MP/8MP")),
                 new Product(2, "Samsung Galaxy S23", 45400, Product.setPriceRange(45400),
-                        Arrays.asList("8GB Ram", "OctaCore Processor", "512GB Memory", "50MP/12MP")),
+                        List.of("8GB Ram", "OctaCore Processor", "512GB Memory", "50MP/12MP")),
                 new Product(3, "Apple iPhone15", 84525, Product.setPriceRange(84525),
-                        Arrays.asList("8GB Ram", "A16 Bionic", "512GB Memory", "48MP/12MP")),
+                        List.of("8GB Ram", "A16 Bionic", "512GB Memory", "48MP/12MP")),
                 new Product(4, "MicroMax In Note2", 42000, Product.setPriceRange(42000),
-                        Arrays.asList("4GB Ram", "MediaTek Helio G95", "64GB Memory", "53MP/18MP"))
+                        List.of("4GB Ram", "MediaTek Helio G95", "64GB Memory", "53MP/18MP"))
         );
     }
 }

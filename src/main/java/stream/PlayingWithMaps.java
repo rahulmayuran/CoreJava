@@ -3,7 +3,6 @@ package stream;
 import lombok.extern.slf4j.Slf4j;
 import modal.Product;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -35,13 +34,19 @@ public class PlayingWithMaps {
      */
 
     public static void main(String[] args) {
+
+        playingWithBasicStreams(Product.listOfProducts());
+        log.info("\n");
+
         log.info("Capitalized Sorted Strings = {}",
-                capitalizeLetter(Arrays.asList("becky99", "becky11", "beethoven11", "beepBeep1", "BangaloreDays43"))
+                capitalizeLetter(List.of("becky99", "becky11", "beethoven11", "beepBeep1", "BangaloreDays43"))
         );
+        log.info("\n");
 
         log.info("Grouped and Capitalized Sorted Strings = {}",
-                capitalizedGroupedLetters(Arrays.asList("becky99", "becky11", "beethoven11", "beepBeep1", "BangaloreDays43"))
+                capitalizedGroupedLetters(List.of("becky99", "becky11", "beethoven11", "beepBeep1", "BangaloreDays43"))
         );
+        log.info("\n");
 
         playingWithFlatMap(Product.listOfProducts());
 
@@ -63,8 +68,8 @@ public class PlayingWithMaps {
 
         Map<Integer, List<String>> result = Collections.singletonMap(
                 (int) getStreams(input).count(),
-                getStreams(input).collect(Collectors.toList())
-        );
+                getStreams(input).toList());
+
         log.info("Map has the keys as :{}, with values:{}", result.keySet(), result.values());
         return result;
     }
@@ -84,22 +89,56 @@ public class PlayingWithMaps {
         //Map -> To transform a Stream<T> to Stream<R>
         List<String> mobileNames = listOfProducts.stream()
                 .map(Product::getName)
-                .collect(Collectors.toList());
+                .toList();
 
         log.info("List of mobile names: {}", mobileNames);
 
         List<List<String>> mobileSpecs = listOfProducts.stream()
                 .map(Product::getSpecs)
-                .collect(Collectors.toList());
+                .toList();
 
         log.info("List of List of Mobile Speculations: {}", mobileSpecs);
 
         //FlatMap -> Flattering the speculations
         List<String> mobileSpecsFlattered = listOfProducts.stream()
                 .flatMap(product -> product.getSpecs().stream())
-                .collect(Collectors.toList());
+                .toList();
 
         log.info("After flattering the Mobile Speculation: {}", mobileSpecsFlattered);
+    }
+
+    private static void playingWithBasicStreams(List<Product> productList){
+
+        int count = productList.stream()
+                .mapToInt(e -> 1)
+                .sum();
+
+        log.info("Count the number of Products: {}", count);
+
+        List<String> mobileNames = productList.stream()
+                .map(Product::getName)
+                .sorted()
+                .toList();
+
+        log.info("Sorting the mobile Names: {}", mobileNames);
+
+        boolean anyMatchCheck =  productList.stream()
+                .anyMatch(p -> p.getName().contains("Apple"));
+        boolean allMatchCheck =  productList.stream()
+                .allMatch(p -> p.getName().length() > 2);
+        boolean noneMatchCheck =  productList.stream()
+                .noneMatch(p -> p.getName().contains("z"));
+
+        log.info("Does the product name contain Apple at all : {} \r\n Does all products have letter 'a' in it? : {} \r\n None of the products have the letter 'z' in it? : {}",
+                anyMatchCheck, allMatchCheck, noneMatchCheck);
+
+        List<String> limitedProduct = productList.stream()
+                .limit(2)
+                .map(Product::getName)
+                .toList();
+
+        log.info("Limited Products to 2 :{}", limitedProduct);
+
     }
 
 }

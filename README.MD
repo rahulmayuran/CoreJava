@@ -3,9 +3,13 @@
 * [Technologies](#technologies)
 
 ## General info
-Contains programs with core java concepts like Multithreading, I/O , Serialization, Basic OOPS concepts, Collection , Map , Stream API, functional interfaces and Lambda expressions
+Java Streams
+> * Imperative to Functional approach
+> * Dealing with Collections
+> * Does parellel processing
 	
 ## Technologies
 Project is created with:
-* Java 1.8
+* Java 18
+* Java Streams API
 	
