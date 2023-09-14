@@ -6,7 +6,7 @@
 Java Streams
 > * Imperative to Functional approach
 > * Dealing with Collections
-> * Does parellel processing
+> * Does parallel processing
 	
 ## Technologies
 Project is created with:
