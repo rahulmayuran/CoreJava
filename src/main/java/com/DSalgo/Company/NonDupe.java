@@ -8,7 +8,7 @@ public class NonDupe {
 
         System.out.println(findNonDupe("CORONA"));
         System.out.println(findNonDupe2("CORONA"));
-        System.out.println(findNonDupe3("CORONA"));
+//        System.out.println(findNonDupe3("CORONA"));
 
     }
 
@@ -51,13 +51,13 @@ public class NonDupe {
         return '\0';
     }
 
-    public static char findNonDupe3(String str){
+    /*public static char findNonDupe3(String str){
         List<char[]> chList = List.of(str.toCharArray());
         Optional<char[]> res = chList.stream()
                 .filter(e -> Collections.frequency(chList, e) == 1)
                 .findFirst();
 
         return res.map(chars -> chars[0]).orElse('\0');
-    }
+    }*/
 
 }

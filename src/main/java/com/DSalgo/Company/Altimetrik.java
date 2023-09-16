@@ -1,7 +1,6 @@
 package com.DSalgo.Company;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Altimetrik {
 
@@ -20,7 +19,7 @@ public class Altimetrik {
             System.out.println();
         }
 
-        printNonRepeatingChar("Rahul raja");
+        System.out.println("Non repeating character = " + printNonRepeatingChar("Rahul raja"));;
 
 
         List<String> names = Arrays.asList("Autumn", "Spring", "Winter", "Summer", "Autumn");
@@ -38,20 +37,18 @@ public class Altimetrik {
         System.out.println("dupe with a set => " + (dupeStr.isPresent() ? dupeStr.get() : new CustomException()));
     }
 
-    //"Rahul raja"
+    //"Rahul raja" => h
     public static char printNonRepeatingChar(String s){
-        char[] ch = s.toLowerCase().toCharArray();
-        Map<Character, Integer> res = new HashMap<>();
-        List<Character> out = new ArrayList<>();
-
-        for (int i = 0; i < ch.length; i++) {
-            if(!res.containsKey(ch[i])){
-                System.out.println("Distinct Character -> " + ch[i]);
-                out.add(ch[i]);
-            }
-            res.put(ch[i], i);
-        }
-        System.out.println("Non repeating chars " + out);
-        return 'a';
+       int[] intArr = new int[256];
+       char[] xhArr = s.toLowerCase().toCharArray();
+       for(char x : xhArr){
+           intArr[x]++;
+       }
+       for(char c : xhArr){
+           if(intArr[c] == 1){
+               return c;
+           }
+       }
+       return '\0';
     }
 }
