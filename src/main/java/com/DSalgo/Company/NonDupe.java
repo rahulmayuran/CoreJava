@@ -6,17 +6,21 @@ public class NonDupe {
 
     public static void main(String[] args) {
 
-        System.out.println(findNonDupe("CORONA"));
-        System.out.println(findNonDupe2("CORONA"));
+        System.out.println(findNonDupe("REARED"));
+        System.out.println(findNonDupe2("REARED"));
 //        System.out.println(findNonDupe3("CORONA"));
 
     }
 
     public static char findNonDupe(String str){
 
-        LinkedHashMap<Character, Integer> charCount = new LinkedHashMap<>();
+        HashMap<Character, Integer> charCount = new HashMap<>();
 
         for(char c : str.toCharArray()){
+
+//            This can also be used
+//            charCount.put(c, charCount.getOrDefault(c, 1) + 1);
+
             if(charCount.containsKey(c)){
                 charCount.put(c, charCount.get(c) + 1);
             } else {
@@ -29,7 +33,7 @@ public class NonDupe {
                 return c;
             }
         }
-        return '\000';
+        return '\0';
     }
 
     public static char findNonDupe2(String str){
