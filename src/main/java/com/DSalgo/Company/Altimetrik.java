@@ -1,5 +1,7 @@
 package com.DSalgo.Company;
 
+import com.DSalgo.error.CustomException;
+
 import java.util.*;
 
 public class Altimetrik {

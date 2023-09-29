@@ -1,4 +1,4 @@
-package com.DSalgo.Company;
+package com.DSalgo.error;
 
 public class CustomException extends Exception{
 
