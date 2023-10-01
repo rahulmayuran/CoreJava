@@ -1,6 +1,5 @@
 package com.DSalgo.Company;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -17,46 +16,42 @@ public class Photon {
      */
     public static void main(String[] args) {
 
-        Employee e1 = new Employee(1, "Rahul", 23, 80000);
-        Employee e2 = new Employee(2, "Bala", 24, 75000);
-        Employee e3 = new Employee(3, "Dheeraj", 25, 90000);
-
-        List<Employee> employees = Arrays.asList(e1, e2, e3);
+        EmployeeHelper helper = new EmployeeHelper();
 
         //Sort with salary in descending order
-        employees.sort(Comparator.comparingInt(Employee::getSalary).reversed());
+        helper.getEmployees().sort(Comparator.comparingInt(EmployeeHelper::getSalary).reversed());
 
-        System.out.println("Salaries in reverse order -> " + employees);
+        System.out.println("Salaries in reverse order -> " + helper.getEmployees());
 
         //Sort with Age in normal order
-        employees.sort(Comparator.comparing(Employee::getAge));
+        helper.getEmployees().sort(Comparator.comparing(EmployeeHelper::getAge));
 
         //Now, Replace the ascending order names in the place of ascending age
-        List<String> sortedNames = employees.stream()
-                .sorted(Comparator.comparing(Employee::getName))
-                .map(Employee::getName)
+        List<String> sortedNames = helper.getEmployees().stream()
+                .sorted(Comparator.comparing(EmployeeHelper::getName))
+                .map(EmployeeHelper::getName)
                 .collect(Collectors.toList());
 
         System.out.println("sortedNames = " + sortedNames);
 
         int i=0;
-        for(Employee e : employees){
+        for(EmployeeHelper e : helper.getEmployees()){
             e.setName(sortedNames.get(i));
             i++;
         }
-        System.out.println("End result after replacing names -> " + employees);
+        System.out.println("End result after replacing names -> " + helper.getEmployees());
 
         /**
          * What is the purpose of Optional final class
          */
-        System.out.println("Optional check ->" + optionalEmployee(Optional.of(new Employee(11, "Some", 24, 242345))));
-        System.out.println("Optional check empty object ->" + optionalEmployee(Optional.of(new Employee())));
+        System.out.println("Optional check ->" + optionalEmployee(Optional.of(new EmployeeHelper(11, "Some", 24, 242345))));
+        System.out.println("Optional check empty object ->" + optionalEmployee(Optional.of(new EmployeeHelper())));
         System.out.println("Optional check null ->" + optionalEmployee(Optional.empty()));
 
 
     }
 
-    public static Optional<Employee> optionalEmployee(Optional<Employee> o) {
+    public static Optional<EmployeeHelper> optionalEmployee(Optional<EmployeeHelper> o) {
         System.out.println();
         if(o.isPresent()){
             System.out.println("Employee object detected");
@@ -64,65 +59,5 @@ public class Photon {
             System.out.println("No Employee object found");
         }
         return o;
-    }
-}
-
-
-class Employee{
-    private int id;
-    private String name;
-    private int age;
-    private int salary;
-
-    public int getId() {
-        return id;
-    }
-
-    public Employee(){
-
-    }
-    public Employee(int id, String name, int age, int salary){
-        this.id = id;
-        this.name = name;
-        this.age = age;
-        this.salary = salary;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public int getSalary() {
-        return salary;
-    }
-
-    public void setSalary(int salary) {
-        this.salary = salary;
-    }
-
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", salary=" + salary +
-                '}';
     }
 }

@@ -16,23 +16,30 @@ public class ComCast {
 
     private static int findMinimumSumUsingQueue(List<Integer> asList, int k) {
 
+        //Initialize the queue with the decreasing order using a priority queue.
         Queue<Integer> queue = new PriorityQueue<>(Collections.reverseOrder());
         int sum = 0;
 
-        //Fill the queue
+        //Fill the queue with the list items.
         for(int j : asList){
             queue.offer(j);
         }
 
+        //Loop the elements k times and queue size times.
+        //Find the max-element, which is the polled element.
+        //add it back to the queue with itself cut and ceil'ed into its half
+        //Decrement the k count
         while(!queue.isEmpty() && k > 0){
             double maxElement = queue.poll();
             queue.offer((int) Math.ceil(maxElement/ 2.0));
             k--;
         }
 
+        //Now, sum up the queue.
         for(int a : queue){
             sum += a;
         }
+        //return it
         return sum;
     }
 
@@ -42,14 +49,17 @@ public class ComCast {
 
         //Run the loop k times, and then List size times inside k.
         for (int i = 0; i < k; i++) {
+            //It should be inside the first loop, because max and maxIndex are reset for every i.
             int max = 0;
             int maxIndex = 0;
+            //Now run the loop arrayList's size times to find the max and max-index.
             for (int j = 0; j < asList.size(); j++) {
                 if(max < asList.get(j)){
                     max = asList.get(j);
                     maxIndex = j;
                 }
             }
+            //Set the ArrayList elements back to the i'th loop. K loop times matters, not the arrayList loop.
             asList.set(maxIndex, (int) Math.ceil(max/2.0));
         }
 
@@ -62,7 +72,7 @@ public class ComCast {
 
     public static char findNonDupe(String str){
 
-        HashMap<Character, Integer> charCount = new HashMap<>();
+        Map<Character, Integer> charCount = new HashMap<>();
 
         for(char c : str.toCharArray()){
 

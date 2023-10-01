@@ -10,12 +10,14 @@ public class Nagarro {
         //Problem 1
         int[] input = {14, 14, 18, 18, 9, 23};
         int[] output = findDuplicatesInArray(input, input.length);
+
+        //Problem 1 alternative
         for(int i : output){
-            System.out.println(i);
+            System.out.print(i +" ");
         }
 
         //Problem 2
-        System.out.println(distanceBetweenMostRepeatedChars("I have A race car"));
+        System.out.print(distanceBetweenMostRepeatedChars("I have A race car"));
 
 
     }
@@ -44,6 +46,7 @@ public class Nagarro {
         String strippedString = in.toLowerCase()
                 .replace(" ", "");
         System.out.println("Stripped string is " + strippedString);
+        System.out.println("The distance between the first and last occurrence of " + res + " is ");
 
         int diff = (strippedString.lastIndexOf(res) - strippedString.indexOf(res));
         return diff <= 0 ? -1 : diff;
