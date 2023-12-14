@@ -2,7 +2,8 @@ package com.DSalgo.Company.Relx;
 
 //Question 1 - Find out the print Statements
 //Question 2 - Create a Custom ArrayList class that should not allow duplicate elements to be added.
-//Question 3 - Find the female candidate who scored the third highest mark.
+//Question 3 - Find the female candidate who scored the third-highest mark.
+//Question 4 - Write the configuration for Swagger
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -108,6 +109,15 @@ public class Relx{
                         .findFirst();
 
         femaleWithThirdHighestMark.ifPresent(System.out::println);
+
+        //Solution4
+        /*
+            1. Add dependencies in pom.xml for springfox-boot-starter
+            2. Create a swagger config class marked as @Configuration, @EnableSwagger2 and
+                create a @Bean method for Docket api() that returns Docket() with select(), path() and build().
+            3. Annotate the controllers with @Api at class level and @ApiOperation at method level.
+            4. Run the app and access swagger by /swagger-ui.html link.
+         */
 
     }
 }
