@@ -1,4 +1,4 @@
-package com.security;
+package com.security.folder.rtf;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -7,9 +7,14 @@ import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
-import java.security.SecureRandom;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
 
-public class JavaEncryptorDecrypt {
+public class FolderDecryptor {
     private static final String ALGORITHM = "AES/GCM/NoPadding";
     private static final int KEY_LENGTH = 256; // AES-256
     private static final int GCM_IV_LENGTH = 12; // Recommended IV length for GCM
@@ -19,55 +24,51 @@ public class JavaEncryptorDecrypt {
 
     public static void main(String[] args) {
         try {
-            String inputFile = "April.rtf"; // Input WordPad file (RTF)
-            String encryptedFile = "encrypted.bin"; // Encrypted output file
-            String decryptedFile = "decrypted.rtf"; // Decrypted output file
-            String password = "MySecurePassword123"; // User-provided password
+            Scanner scanner = new Scanner(System.in);
 
-            // Encrypt the file
-            encryptFile(inputFile, encryptedFile, password);
-            System.out.println("File encrypted successfully to: " + encryptedFile);
+            // Prompt for folder path
+            System.out.print("Enter the folder path to scan for .bin files (e.g., D:\\Documents): ");
+            String folderPath = scanner.nextLine().trim();
 
-            // Decrypt the file
-            decryptFile(encryptedFile, decryptedFile, password);
-            System.out.println("File decrypted successfully to: " + decryptedFile);
+            // Prompt for password
+            System.out.print("Enter the decryption password: ");
+            String password = scanner.nextLine().trim();
 
+            // Scan for .bin files with .encYYYYMMDD.bin pattern
+            List<Path> binFiles = Files.list(Paths.get(folderPath))
+                    .filter(path -> path.toString().toLowerCase().matches(".*\\.\\d{8}\\.bin$"))
+                    .collect(Collectors.toList());
+
+            if (binFiles.isEmpty()) {
+                System.out.println("No .bin files with .YYYYMMDD.bin pattern found in the specified folder: " + folderPath);
+                return;
+            }
+
+            // Decrypt each .bin file
+            for (Path binFile : binFiles) {
+                String encryptedFile = binFile.toString();
+                String decryptedFile = getDecryptedFileName(encryptedFile);
+
+                decryptFile(encryptedFile, decryptedFile, password);
+                System.out.println("Decrypted: " + encryptedFile + " -> " + decryptedFile);
+            }
+
+            System.out.println("Decryption completed for all .bin files.");
+            scanner.close();
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    // Encrypts the input file and writes the result to encryptedFile
-    public static void encryptFile(String inputFile, String encryptedFile, String password) throws Exception {
-        // Read the input file as bytes
-        byte[] fileBytes = readFileAsBytes(inputFile);
-
-        // Generate a random salt and IV
-        byte[] salt = generateRandomBytes(SALT_LENGTH);
-        byte[] iv = generateRandomBytes(GCM_IV_LENGTH);
-
-        // Derive the AES key from the password
-        SecretKey key = deriveKey(password, salt);
-
-        // Initialize cipher for encryption
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
-        GCMParameterSpec gcmSpec = new GCMParameterSpec(GCM_TAG_LENGTH, iv);
-        cipher.init(Cipher.ENCRYPT_MODE, key, gcmSpec);
-
-        // Encrypt the content
-        byte[] encryptedBytes = cipher.doFinal(fileBytes);
-
-        // Write salt, IV, and encrypted data to the output file
-        try (FileOutputStream fos = new FileOutputStream(encryptedFile)) {
-            fos.write(salt); // Write salt
-            fos.write(iv);   // Write IV
-            fos.write(encryptedBytes); // Write encrypted data
-        }
-    }
-
     // Decrypts the encrypted file and writes the result to decryptedFile
     public static void decryptFile(String encryptedFile, String decryptedFile, String password) throws Exception {
+        // Validate input file
+        File file = new File(encryptedFile);
+        if (!file.exists()) {
+            throw new FileNotFoundException("Encrypted file does not exist: " + encryptedFile);
+        }
+
         // Read the encrypted file
         byte[] fileBytes = readFileAsBytes(encryptedFile);
 
@@ -108,13 +109,6 @@ public class JavaEncryptorDecrypt {
         return new SecretKeySpec(keyBytes, "AES");
     }
 
-    // Generates random bytes for salt or IV
-    private static byte[] generateRandomBytes(int length) {
-        byte[] bytes = new byte[length];
-        new SecureRandom().nextBytes(bytes);
-        return bytes;
-    }
-
     // Reads the content of a file as bytes
     private static byte[] readFileAsBytes(String filePath) throws IOException {
         try (FileInputStream fis = new FileInputStream(filePath)) {
@@ -125,6 +119,21 @@ public class JavaEncryptorDecrypt {
                 baos.write(buffer, 0, bytesRead);
             }
             return baos.toByteArray();
+        }
+    }
+
+    // Gets the decrypted file name by removing .YYYYMMDD.bin suffix
+    private static String getDecryptedFileName(String encryptedFile) {
+        File file = new File(encryptedFile);
+        String fileName = file.getName();
+        // Remove .YYYYMMDD.bin suffix
+        String pattern = "\\.\\d{8}\\.bin$";
+        if (fileName.matches(".*" + pattern)) {
+            fileName = fileName.replaceAll(pattern, "");
+            return file.getParent() + File.separator + fileName + ".rtf";
+        } else {
+            // Fallback: remove .bin and add .rtf
+            return file.getParent() + File.separator + fileName.replace(".bin", ".rtf");
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.security.folder;
+package com.security.master;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -7,6 +7,7 @@ import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-public class FolderDecryptor {
+public class MasterDecryptor {
     private static final String ALGORITHM = "AES/GCM/NoPadding";
     private static final int KEY_LENGTH = 256; // AES-256
     private static final int GCM_IV_LENGTH = 12; // Recommended IV length for GCM
@@ -27,20 +28,20 @@ public class FolderDecryptor {
             Scanner scanner = new Scanner(System.in);
 
             // Prompt for folder path
-            System.out.print("Enter the folder path to scan for .bin files (e.g., D:\\Documents): ");
+            System.out.print("Enter the folder path to decrypt .bin files under (e.g., D:\\Documents): ");
             String folderPath = scanner.nextLine().trim();
 
             // Prompt for password
             System.out.print("Enter the decryption password: ");
             String password = scanner.nextLine().trim();
 
-            // Scan for .bin files with .encYYYYMMDD.bin pattern
+            // Scan for .bin files with .YYYYMMDD-HHMMSS-ZZZ.bin pattern
             List<Path> binFiles = Files.list(Paths.get(folderPath))
-                    .filter(path -> path.toString().toLowerCase().matches(".*\\.\\d{8}\\.bin$"))
+                    .filter(path -> path.toString().toLowerCase().matches(".*\\.\\d{8}-\\d{6}+\\.bin$"))
                     .collect(Collectors.toList());
 
             if (binFiles.isEmpty()) {
-                System.out.println("No .bin files with .YYYYMMDD.bin pattern found in the specified folder: " + folderPath);
+                System.out.println("No .bin files with .YYYYMMDD-HHMMSS-ZZZ.bin pattern found in the specified folder: " + folderPath);
                 return;
             }
 
@@ -72,17 +73,28 @@ public class FolderDecryptor {
         // Read the encrypted file
         byte[] fileBytes = readFileAsBytes(encryptedFile);
 
-        // Extract salt, IV, and encrypted data
-        if (fileBytes.length < SALT_LENGTH + GCM_IV_LENGTH) {
+        // Extract salt, IV, extension length, extension, and encrypted data
+        if (fileBytes.length < SALT_LENGTH + GCM_IV_LENGTH + 4) {
             throw new IllegalArgumentException("Invalid encrypted file format");
         }
         byte[] salt = new byte[SALT_LENGTH];
         byte[] iv = new byte[GCM_IV_LENGTH];
-        byte[] encryptedData = new byte[fileBytes.length - SALT_LENGTH - GCM_IV_LENGTH];
+        byte[] extensionLengthBytes = new byte[4];
 
         System.arraycopy(fileBytes, 0, salt, 0, SALT_LENGTH);
         System.arraycopy(fileBytes, SALT_LENGTH, iv, 0, GCM_IV_LENGTH);
-        System.arraycopy(fileBytes, SALT_LENGTH + GCM_IV_LENGTH, encryptedData, 0, encryptedData.length);
+        System.arraycopy(fileBytes, SALT_LENGTH + GCM_IV_LENGTH, extensionLengthBytes, 0, 4);
+
+        int extensionLength = ByteBuffer.wrap(extensionLengthBytes).getInt();
+        if (fileBytes.length < SALT_LENGTH + GCM_IV_LENGTH + 4 + extensionLength) {
+            throw new IllegalArgumentException("Invalid encrypted file format: extension length mismatch");
+        }
+
+        byte[] extensionBytes = new byte[extensionLength];
+        System.arraycopy(fileBytes, SALT_LENGTH + GCM_IV_LENGTH + 4, extensionBytes, 0, extensionLength);
+
+        byte[] encryptedData = new byte[fileBytes.length - SALT_LENGTH - GCM_IV_LENGTH - 4 - extensionLength];
+        System.arraycopy(fileBytes, SALT_LENGTH + GCM_IV_LENGTH + 4 + extensionLength, encryptedData, 0, encryptedData.length);
 
         // Derive the AES key from the password
         SecretKey key = deriveKey(password, salt);
@@ -122,18 +134,34 @@ public class FolderDecryptor {
         }
     }
 
-    // Gets the decrypted file name by removing .YYYYMMDD.bin suffix
-    private static String getDecryptedFileName(String encryptedFile) {
+    // Gets the decrypted file name by removing .YYYYMMDD-HHMMSS-ZZZ.bin suffix and using stored extension
+    private static String getDecryptedFileName(String encryptedFile) throws IOException {
         File file = new File(encryptedFile);
         String fileName = file.getName();
-        // Remove .YYYYMMDD.bin suffix
-        String pattern = "\\.\\d{8}\\.bin$";
-        if (fileName.matches(".*" + pattern)) {
-            fileName = fileName.replaceAll(pattern, "");
-            return file.getParent() + File.separator + fileName + ".rtf";
-        } else {
-            // Fallback: remove .bin and add .rtf
-            return file.getParent() + File.separator + fileName.replace(".bin", ".rtf");
+        String parentDir = file.getParent() != null ? file.getParent() : ".";
+
+        // Read the extension from the encrypted file
+        try (FileInputStream fis = new FileInputStream(encryptedFile)) {
+            byte[] salt = new byte[SALT_LENGTH];
+            byte[] iv = new byte[GCM_IV_LENGTH];
+            byte[] extensionLengthBytes = new byte[4];
+
+            if (fis.read(salt) != SALT_LENGTH || fis.read(iv) != GCM_IV_LENGTH || fis.read(extensionLengthBytes) != 4) {
+                throw new IOException("Invalid encrypted file format");
+            }
+
+            int extensionLength = ByteBuffer.wrap(extensionLengthBytes).getInt();
+            byte[] extensionBytes = new byte[extensionLength];
+            if (fis.read(extensionBytes) != extensionLength) {
+                throw new IOException("Invalid extension length in encrypted file");
+            }
+
+            String extension = new String(extensionBytes, "UTF-8");
+
+            // Remove .YYYYMMDD-HHMMSS-ZZZ.bin suffix
+            String pattern = "\\.\\d{8}-\\d{6}+\\.bin$";
+            String baseName = fileName.replaceAll(pattern, "");
+            return parentDir + File.separator + baseName + extension;
         }
     }
 }
