@@ -12,7 +12,8 @@ Project is created with:
 
 ## How to Use
 There are 3 files present in this repository
-1. Does both encryption and Decryption
-2. Does only encryption 
-3. Does only decryption
-	
+1. Folder Level, File Level. 
+2. For Only Decryption Logic -> ```java -cp target/classes com.security.master.MasterDecryptor``` 
+3. For Only Encryption Logic -> ```java -cp target/classes com.security.master.MasterEncryptor```
+
+

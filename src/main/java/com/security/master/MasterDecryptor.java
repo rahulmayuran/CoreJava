@@ -1,6 +1,8 @@
 package com.security.master;
 
 import com.security.constants.EncryptionConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -14,11 +16,14 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class MasterDecryptor {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MasterDecryptor.class.getName());
     static String algorithm = EncryptionConstants.ALGORITHM.getStringValue();
     static int keyLength = EncryptionConstants.KEY_LENGTH.getIntValue();
     static int gcmLength = EncryptionConstants.GCM_IV_LENGTH.getIntValue();
@@ -29,62 +34,61 @@ public class MasterDecryptor {
     public static void main(String[] args) {
         try {
             Scanner scanner = new Scanner(System.in);
+            Console console = System.console();
 
-            // Prompt for folder path
-            System.out.print("Enter the folder path to decrypt .bin files under (e.g., D:\\Documents): ");
+            LOGGER.info("Enter the folder path to decrypt .bin files under (e.g., D:\\Documents): ");
             String folderPath = scanner.nextLine().trim();
 
-            // Prompt for password
-            System.out.print("Enter the decryption password: ");
-            String password = scanner.nextLine().trim();
-
-            // Scan for .bin files with .YYYYMMDD-HHMMSS-ZZZ.bin pattern
+            char[] passwordChars;
+            if (console != null) {
+                // Console available - secure password input without echo
+                passwordChars = console.readPassword("Enter the decryption password: ");
+            } else {
+                // Fallback for IDEs or non-interactive environments
+                LOGGER.error("Warning: Console not available. Password will be visible.");
+                LOGGER.info("Enter the decryption password: ");
+                String password = scanner.nextLine().trim();
+                passwordChars = password.toCharArray();
+            }
+            if (passwordChars == null || passwordChars.length == 0) {
+                LOGGER.info("No password entered. Exiting.");
+                return;
+            }
+            String password = new String(passwordChars);
+            Arrays.fill(passwordChars, ' ');
             List<Path> binFiles = Files.list(Paths.get(folderPath))
                     .filter(path -> path.toString().toLowerCase().matches(".*\\.\\d{8}-\\d{6}+\\.bin$"))
                     .collect(Collectors.toList());
-
             if (binFiles.isEmpty()) {
-                System.out.println("No .bin files with .YYYYMMDD-HHMMSS-ZZZ.bin pattern found in the specified folder: " + folderPath);
+                LOGGER.info("No .bin files with .YYYYMMDD-HHMMSS-ZZZ.bin pattern found in the specified folder: {}", folderPath);
                 return;
             }
-
-            // Decrypt each .bin file
             for (Path binFile : binFiles) {
                 String encryptedFile = binFile.toString();
                 String decryptedFile = getDecryptedFileName(encryptedFile);
-
                 decryptFile(encryptedFile, decryptedFile, password);
-                System.out.println("Decrypted: " + encryptedFile + " -> " + decryptedFile);
-
-                // Delete the encrypted file
+                LOGGER.info("Decrypted: {} -> {}",encryptedFile, decryptedFile);
                 try {
                     Files.delete(binFile);
-                    System.out.println("Deleted encrypted file: " + encryptedFile);
+                    LOGGER.info("Deleted encrypted file: {} ", encryptedFile);
                 } catch (IOException e) {
-                    System.err.println("Warning: Could not delete encrypted file: " + encryptedFile + " (" + e.getMessage() + ")");
+                    LOGGER.error("Warning: Could not delete encrypted file: {} ({})", encryptedFile, e.getMessage());
                 }
             }
-
-            System.out.println("Decryption completed for all .bin files.");
+            LOGGER.info("Decryption completed for all .bin files.");
             scanner.close();
         } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.error("Error: {}", e.getMessage());
         }
     }
 
-    // Decrypts the encrypted file and writes the result to decryptedFile
     public static void decryptFile(String encryptedFile, String decryptedFile, String password) throws Exception {
         // Validate input file
         File file = new File(encryptedFile);
         if (!file.exists()) {
             throw new FileNotFoundException("Encrypted file does not exist: " + encryptedFile);
         }
-
-        // Read the encrypted file
         byte[] fileBytes = readFileAsBytes(encryptedFile);
-
-        // Extract salt, IV, extension length, extension, and encrypted data
         if (fileBytes.length < saltLength + gcmLength + 4) {
             throw new IllegalArgumentException("Invalid encrypted file format");
         }

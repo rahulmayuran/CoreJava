@@ -1,6 +1,8 @@
 package com.security.master;
 
 import com.security.constants.EncryptionConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -10,6 +12,7 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,11 +20,13 @@ import java.security.SecureRandom;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class MasterEncryptor {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MasterEncryptor.class.getName());
     static String algorithm = EncryptionConstants.ALGORITHM.getStringValue();
     static int keyLength = EncryptionConstants.KEY_LENGTH.getIntValue();
     static int gcmLength = EncryptionConstants.GCM_IV_LENGTH.getIntValue();
@@ -32,26 +37,38 @@ public class MasterEncryptor {
     public static void main(String[] args) {
         try {
             Scanner scanner = new Scanner(System.in);
+            Console console = System.console();
 
             // Prompt for folder path
-            System.out.print("Enter the folder path to encrypt files under (e.g., D:\\Documents): ");
+            LOGGER.info("Enter the folder path to encrypt files under (e.g., D:\\Documents): ");
             String folderPath = scanner.nextLine().trim();
 
-            // Prompt for password
-            System.out.print("Enter the encryption password: ");
-            String password = scanner.nextLine().trim();
+            char[] passwordChars;
+            if (console != null) {
+                // Console available - secure password input without echo
+                passwordChars = console.readPassword("Enter the decryption password: ");
+            } else {
+                // Fallback for IDEs or non-interactive environments
+                LOGGER.error("Warning: Console not available. Password will be visible.");
+                LOGGER.info("Enter the decryption password: ");
+                String password = scanner.nextLine().trim();
+                passwordChars = password.toCharArray();
+            }
+            if (passwordChars == null || passwordChars.length == 0) {
+                LOGGER.info("No password entered. Exiting.");
+                return;
+            }
+            String password = new String(passwordChars);
+            Arrays.fill(passwordChars, ' ');
 
-            // Generate date-time suffix
             ZonedDateTime now = ZonedDateTime.now(ZoneId.systemDefault());
             String dateTimeSuffix = now.format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
-
-            // Scan for all files in the folder (exclude directories)
             List<Path> files = Files.list(Paths.get(folderPath))
                     .filter(Files::isRegularFile)
                     .collect(Collectors.toList());
 
             if (files.isEmpty()) {
-                System.out.println("No files found in the specified folder: " + folderPath);
+                LOGGER.info("No files found in the specified folder: {}", folderPath);
                 return;
             }
 
@@ -63,26 +80,22 @@ public class MasterEncryptor {
                         "." + dateTimeSuffix + ".bin";
 
                 encryptFile(inputFile, encryptedFile, password);
-                System.out.println("Encrypted: " + inputFile + " -> " + encryptedFile);
+                LOGGER.info("Encrypted: {} -> {}", inputFile, encryptedFile);
 
-                // Delete the original file
                 try {
                     Files.delete(file);
-                    System.out.println("Deleted original file: " + inputFile);
+                    LOGGER.info("Deleted original file: {}", inputFile);
                 } catch (IOException e) {
-                    System.err.println("Warning: Could not delete original file: " + inputFile + " (" + e.getMessage() + ")");
+                    LOGGER.error("Warning: Could not delete original file: {} ({})", inputFile, e.getMessage());
                 }
             }
 
-            System.out.println("Encryption completed for all files.");
+            LOGGER.info("Encryption completed for all files.");
             scanner.close();
         } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.error("Error: {}", e.getMessage());
         }
     }
-
-    // Encrypts the input file and writes the result to encryptedFile
     public static void encryptFile(String inputFile, String encryptedFile, String password) throws Exception {
         // Validate input file
         File file = new File(inputFile);
@@ -90,7 +103,6 @@ public class MasterEncryptor {
             throw new FileNotFoundException("Input file does not exist: " + inputFile);
         }
 
-        // Read the input file as bytes
         byte[] fileBytes = readFileAsBytes(inputFile);
 
         // Generate a random salt and IV
@@ -110,7 +122,7 @@ public class MasterEncryptor {
 
         // Get the file extension
         String extension = getFileExtension(inputFile);
-        byte[] extensionBytes = extension.getBytes("UTF-8");
+        byte[] extensionBytes = extension.getBytes(StandardCharsets.UTF_8);
         byte[] extensionLengthBytes = ByteBuffer.allocate(4).putInt(extensionBytes.length).array();
 
         // Write salt, IV, extension length, extension, and encrypted data to the output file
@@ -157,7 +169,6 @@ public class MasterEncryptor {
         return dotIndex == -1 ? fileName : fileName.substring(0, dotIndex);
     }
 
-    // Gets the file extension (including the dot, e.g., ".json")
     private static String getFileExtension(String fileName) {
         int dotIndex = fileName.lastIndexOf('.');
         return dotIndex == -1 ? "" : fileName.substring(dotIndex);
