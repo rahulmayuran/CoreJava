@@ -1,5 +1,7 @@
 package com.security.master;
 
+import com.security.constants.EncryptionConstants;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -8,6 +10,7 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,12 +19,12 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class MasterDecryptor {
-    private static final String ALGORITHM = "AES/GCM/NoPadding";
-    private static final int KEY_LENGTH = 256; // AES-256
-    private static final int GCM_IV_LENGTH = 12; // Recommended IV length for GCM
-    private static final int GCM_TAG_LENGTH = 128; // Authentication tag length in bits
-    private static final int SALT_LENGTH = 16; // Salt length for PBKDF2
-    private static final int ITERATIONS = 100000; // PBKDF2 iterations
+    static String algorithm = EncryptionConstants.ALGORITHM.getStringValue();
+    static int keyLength = EncryptionConstants.KEY_LENGTH.getIntValue();
+    static int gcmLength = EncryptionConstants.GCM_IV_LENGTH.getIntValue();
+    static int gcmTagLength = EncryptionConstants.GCM_TAG_LENGTH.getIntValue();
+    static int saltLength = EncryptionConstants.SALT_LENGTH.getIntValue();
+    static int iterations = EncryptionConstants.ITERATIONS.getIntValue();
 
     public static void main(String[] args) {
         try {
@@ -52,6 +55,14 @@ public class MasterDecryptor {
 
                 decryptFile(encryptedFile, decryptedFile, password);
                 System.out.println("Decrypted: " + encryptedFile + " -> " + decryptedFile);
+
+                // Delete the encrypted file
+                try {
+                    Files.delete(binFile);
+                    System.out.println("Deleted encrypted file: " + encryptedFile);
+                } catch (IOException e) {
+                    System.err.println("Warning: Could not delete encrypted file: " + encryptedFile + " (" + e.getMessage() + ")");
+                }
             }
 
             System.out.println("Decryption completed for all .bin files.");
@@ -74,34 +85,34 @@ public class MasterDecryptor {
         byte[] fileBytes = readFileAsBytes(encryptedFile);
 
         // Extract salt, IV, extension length, extension, and encrypted data
-        if (fileBytes.length < SALT_LENGTH + GCM_IV_LENGTH + 4) {
+        if (fileBytes.length < saltLength + gcmLength + 4) {
             throw new IllegalArgumentException("Invalid encrypted file format");
         }
-        byte[] salt = new byte[SALT_LENGTH];
-        byte[] iv = new byte[GCM_IV_LENGTH];
+        byte[] salt = new byte[saltLength];
+        byte[] iv = new byte[gcmLength];
         byte[] extensionLengthBytes = new byte[4];
 
-        System.arraycopy(fileBytes, 0, salt, 0, SALT_LENGTH);
-        System.arraycopy(fileBytes, SALT_LENGTH, iv, 0, GCM_IV_LENGTH);
-        System.arraycopy(fileBytes, SALT_LENGTH + GCM_IV_LENGTH, extensionLengthBytes, 0, 4);
+        System.arraycopy(fileBytes, 0, salt, 0, saltLength);
+        System.arraycopy(fileBytes, saltLength, iv, 0, gcmLength);
+        System.arraycopy(fileBytes, saltLength + gcmLength, extensionLengthBytes, 0, 4);
 
         int extensionLength = ByteBuffer.wrap(extensionLengthBytes).getInt();
-        if (fileBytes.length < SALT_LENGTH + GCM_IV_LENGTH + 4 + extensionLength) {
+        if (fileBytes.length < saltLength + gcmLength + 4 + extensionLength) {
             throw new IllegalArgumentException("Invalid encrypted file format: extension length mismatch");
         }
 
         byte[] extensionBytes = new byte[extensionLength];
-        System.arraycopy(fileBytes, SALT_LENGTH + GCM_IV_LENGTH + 4, extensionBytes, 0, extensionLength);
+        System.arraycopy(fileBytes, saltLength + gcmLength + 4, extensionBytes, 0, extensionLength);
 
-        byte[] encryptedData = new byte[fileBytes.length - SALT_LENGTH - GCM_IV_LENGTH - 4 - extensionLength];
-        System.arraycopy(fileBytes, SALT_LENGTH + GCM_IV_LENGTH + 4 + extensionLength, encryptedData, 0, encryptedData.length);
+        byte[] encryptedData = new byte[fileBytes.length - saltLength - gcmLength - 4 - extensionLength];
+        System.arraycopy(fileBytes, saltLength + gcmLength + 4 + extensionLength, encryptedData, 0, encryptedData.length);
 
         // Derive the AES key from the password
         SecretKey key = deriveKey(password, salt);
 
         // Initialize cipher for decryption
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
-        GCMParameterSpec gcmSpec = new GCMParameterSpec(GCM_TAG_LENGTH, iv);
+        Cipher cipher = Cipher.getInstance(algorithm);
+        GCMParameterSpec gcmSpec = new GCMParameterSpec(gcmTagLength, iv);
         cipher.init(Cipher.DECRYPT_MODE, key, gcmSpec);
 
         // Decrypt the content
@@ -115,7 +126,7 @@ public class MasterDecryptor {
 
     // Derives a SecretKey from a password and salt using PBKDF2
     private static SecretKey deriveKey(String password, byte[] salt) throws Exception {
-        PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, ITERATIONS, KEY_LENGTH);
+        PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iterations, keyLength);
         SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         byte[] keyBytes = skf.generateSecret(spec).getEncoded();
         return new SecretKeySpec(keyBytes, "AES");
@@ -142,11 +153,11 @@ public class MasterDecryptor {
 
         // Read the extension from the encrypted file
         try (FileInputStream fis = new FileInputStream(encryptedFile)) {
-            byte[] salt = new byte[SALT_LENGTH];
-            byte[] iv = new byte[GCM_IV_LENGTH];
+            byte[] salt = new byte[saltLength];
+            byte[] iv = new byte[gcmLength];
             byte[] extensionLengthBytes = new byte[4];
 
-            if (fis.read(salt) != SALT_LENGTH || fis.read(iv) != GCM_IV_LENGTH || fis.read(extensionLengthBytes) != 4) {
+            if (fis.read(salt) != saltLength || fis.read(iv) != gcmLength || fis.read(extensionLengthBytes) != 4) {
                 throw new IOException("Invalid encrypted file format");
             }
 
@@ -156,7 +167,7 @@ public class MasterDecryptor {
                 throw new IOException("Invalid extension length in encrypted file");
             }
 
-            String extension = new String(extensionBytes, "UTF-8");
+            String extension = new String(extensionBytes, StandardCharsets.UTF_8);
 
             // Remove .YYYYMMDD-HHMMSS-ZZZ.bin suffix
             String pattern = "\\.\\d{8}-\\d{6}+\\.bin$";

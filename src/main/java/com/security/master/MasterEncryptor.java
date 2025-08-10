@@ -1,5 +1,7 @@
 package com.security.master;
 
+import com.security.constants.EncryptionConstants;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -20,12 +22,12 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class MasterEncryptor {
-    private static final String ALGORITHM = "AES/GCM/NoPadding";
-    private static final int KEY_LENGTH = 256; // AES-256
-    private static final int GCM_IV_LENGTH = 12; // Recommended IV length for GCM
-    private static final int GCM_TAG_LENGTH = 128; // Authentication tag length in bits
-    private static final int SALT_LENGTH = 16; // Salt length for PBKDF2
-    private static final int ITERATIONS = 100000; // PBKDF2 iterations
+    static String algorithm = EncryptionConstants.ALGORITHM.getStringValue();
+    static int keyLength = EncryptionConstants.KEY_LENGTH.getIntValue();
+    static int gcmLength = EncryptionConstants.GCM_IV_LENGTH.getIntValue();
+    static int gcmTagLength = EncryptionConstants.GCM_TAG_LENGTH.getIntValue();
+    static int saltLength = EncryptionConstants.SALT_LENGTH.getIntValue();
+    static int iterations = EncryptionConstants.ITERATIONS.getIntValue();
 
     public static void main(String[] args) {
         try {
@@ -62,6 +64,14 @@ public class MasterEncryptor {
 
                 encryptFile(inputFile, encryptedFile, password);
                 System.out.println("Encrypted: " + inputFile + " -> " + encryptedFile);
+
+                // Delete the original file
+                try {
+                    Files.delete(file);
+                    System.out.println("Deleted original file: " + inputFile);
+                } catch (IOException e) {
+                    System.err.println("Warning: Could not delete original file: " + inputFile + " (" + e.getMessage() + ")");
+                }
             }
 
             System.out.println("Encryption completed for all files.");
@@ -84,15 +94,15 @@ public class MasterEncryptor {
         byte[] fileBytes = readFileAsBytes(inputFile);
 
         // Generate a random salt and IV
-        byte[] salt = generateRandomBytes(SALT_LENGTH);
-        byte[] iv = generateRandomBytes(GCM_IV_LENGTH);
+        byte[] salt = generateRandomBytes(saltLength);
+        byte[] iv = generateRandomBytes(gcmLength);
 
         // Derive the AES key from the password
         SecretKey key = deriveKey(password, salt);
 
         // Initialize cipher for encryption
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
-        GCMParameterSpec gcmSpec = new GCMParameterSpec(GCM_TAG_LENGTH, iv);
+        Cipher cipher = Cipher.getInstance(algorithm);
+        GCMParameterSpec gcmSpec = new GCMParameterSpec(gcmTagLength, iv);
         cipher.init(Cipher.ENCRYPT_MODE, key, gcmSpec);
 
         // Encrypt the content
@@ -115,7 +125,7 @@ public class MasterEncryptor {
 
     // Derives a SecretKey from a password and salt using PBKDF2
     private static SecretKey deriveKey(String password, byte[] salt) throws Exception {
-        PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, ITERATIONS, KEY_LENGTH);
+        PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iterations, keyLength);
         SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         byte[] keyBytes = skf.generateSecret(spec).getEncoded();
         return new SecretKeySpec(keyBytes, "AES");
