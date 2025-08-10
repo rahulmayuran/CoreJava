@@ -1,6 +1,5 @@
 package com.security.master;
 
-import com.security.constants.EncryptionConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +25,6 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class MasterEncryptor {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MasterEncryptor.class.getName());
     static String algorithm = EncryptionConstants.ALGORITHM.getStringValue();
     static int keyLength = EncryptionConstants.KEY_LENGTH.getIntValue();
     static int gcmLength = EncryptionConstants.GCM_IV_LENGTH.getIntValue();
@@ -40,7 +38,7 @@ public class MasterEncryptor {
             Console console = System.console();
 
             // Prompt for folder path
-            LOGGER.info("Enter the folder path to encrypt files under (e.g., D:\\Documents): ");
+            System.out.println("Enter the folder path to encrypt files under (e.g., D:\\Documents): ");
             String folderPath = scanner.nextLine().trim();
 
             char[] passwordChars;
@@ -49,13 +47,13 @@ public class MasterEncryptor {
                 passwordChars = console.readPassword("Enter the decryption password: ");
             } else {
                 // Fallback for IDEs or non-interactive environments
-                LOGGER.error("Warning: Console not available. Password will be visible.");
-                LOGGER.info("Enter the decryption password: ");
+                System.err.println("Warning: Console not available. Password will be visible.");
+                System.out.println("Enter the decryption password: ");
                 String password = scanner.nextLine().trim();
                 passwordChars = password.toCharArray();
             }
             if (passwordChars == null || passwordChars.length == 0) {
-                LOGGER.info("No password entered. Exiting.");
+                System.out.println("No password entered. Exiting.");
                 return;
             }
             String password = new String(passwordChars);
@@ -68,7 +66,7 @@ public class MasterEncryptor {
                     .collect(Collectors.toList());
 
             if (files.isEmpty()) {
-                LOGGER.info("No files found in the specified folder: {}", folderPath);
+                System.out.println("No files found in the specified folder: " + folderPath);
                 return;
             }
 
@@ -80,22 +78,23 @@ public class MasterEncryptor {
                         "." + dateTimeSuffix + ".bin";
 
                 encryptFile(inputFile, encryptedFile, password);
-                LOGGER.info("Encrypted: {} -> {}", inputFile, encryptedFile);
+                System.out.println("Encrypted: " + inputFile + ", is " + encryptedFile);
 
                 try {
                     Files.delete(file);
-                    LOGGER.info("Deleted original file: {}", inputFile);
+                    System.out.println("Deleted original file: {}" + inputFile);
                 } catch (IOException e) {
-                    LOGGER.error("Warning: Could not delete original file: {} ({})", inputFile, e.getMessage());
+                    System.err.println("Warning: Could not delete original file -> " + inputFile + ", " + e.getMessage());
                 }
             }
 
-            LOGGER.info("Encryption completed for all files.");
+            System.out.println("Encryption completed for all files.");
             scanner.close();
         } catch (Exception e) {
-            LOGGER.error("Error: {}", e.getMessage());
+            System.err.println("Error: " + e.getMessage());
         }
     }
+
     public static void encryptFile(String inputFile, String encryptedFile, String password) throws Exception {
         // Validate input file
         File file = new File(inputFile);
@@ -173,4 +172,29 @@ public class MasterEncryptor {
         int dotIndex = fileName.lastIndexOf('.');
         return dotIndex == -1 ? "" : fileName.substring(dotIndex);
     }
+}
+
+enum EncryptionConstants {
+
+    ALGORITHM("AES/GCM/NoPadding"),
+    KEY_LENGTH(256),
+    GCM_IV_LENGTH(12),
+    GCM_TAG_LENGTH(128),
+    SALT_LENGTH(16),
+    ITERATIONS(100000);
+
+    private final Object value;
+
+    EncryptionConstants(Object value) {
+        this.value = value;
+    }
+
+    public String getStringValue() {
+        return (String) value;
+    }
+
+    public int getIntValue() {
+        return (Integer) value;
+    }
+
 }

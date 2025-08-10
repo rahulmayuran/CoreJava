@@ -1,6 +1,5 @@
 package com.security.master;
 
-import com.security.constants.EncryptionConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,21 +21,19 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class MasterDecryptor {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(MasterDecryptor.class.getName());
-    static String algorithm = EncryptionConstants.ALGORITHM.getStringValue();
-    static int keyLength = EncryptionConstants.KEY_LENGTH.getIntValue();
-    static int gcmLength = EncryptionConstants.GCM_IV_LENGTH.getIntValue();
-    static int gcmTagLength = EncryptionConstants.GCM_TAG_LENGTH.getIntValue();
-    static int saltLength = EncryptionConstants.SALT_LENGTH.getIntValue();
-    static int iterations = EncryptionConstants.ITERATIONS.getIntValue();
+    static String algorithm = DecryptionConstants.ALGORITHM.getStringValue();
+    static int keyLength = DecryptionConstants.KEY_LENGTH.getIntValue();
+    static int gcmLength = DecryptionConstants.GCM_IV_LENGTH.getIntValue();
+    static int gcmTagLength = DecryptionConstants.GCM_TAG_LENGTH.getIntValue();
+    static int saltLength = DecryptionConstants.SALT_LENGTH.getIntValue();
+    static int iterations = DecryptionConstants.ITERATIONS.getIntValue();
 
     public static void main(String[] args) {
         try {
             Scanner scanner = new Scanner(System.in);
             Console console = System.console();
 
-            LOGGER.info("Enter the folder path to decrypt .bin files under (e.g., D:\\Documents): ");
+            System.out.println("Enter the folder path to decrypt .bin files under (e.g., D:\\Documents): ");
             String folderPath = scanner.nextLine().trim();
 
             char[] passwordChars;
@@ -45,13 +42,13 @@ public class MasterDecryptor {
                 passwordChars = console.readPassword("Enter the decryption password: ");
             } else {
                 // Fallback for IDEs or non-interactive environments
-                LOGGER.error("Warning: Console not available. Password will be visible.");
-                LOGGER.info("Enter the decryption password: ");
+                System.err.println("Warning: Console not available. Password will be visible.");
+                System.out.println("Enter the decryption password: ");
                 String password = scanner.nextLine().trim();
                 passwordChars = password.toCharArray();
             }
             if (passwordChars == null || passwordChars.length == 0) {
-                LOGGER.info("No password entered. Exiting.");
+                System.out.println("No password entered. Exiting.");
                 return;
             }
             String password = new String(passwordChars);
@@ -60,25 +57,25 @@ public class MasterDecryptor {
                     .filter(path -> path.toString().toLowerCase().matches(".*\\.\\d{8}-\\d{6}+\\.bin$"))
                     .collect(Collectors.toList());
             if (binFiles.isEmpty()) {
-                LOGGER.info("No .bin files with .YYYYMMDD-HHMMSS-ZZZ.bin pattern found in the specified folder: {}", folderPath);
+                System.out.println("No .bin files with .YYYYMMDD-HHMMSS-ZZZ.bin pattern found in the specified folder:" + folderPath);
                 return;
             }
             for (Path binFile : binFiles) {
                 String encryptedFile = binFile.toString();
                 String decryptedFile = getDecryptedFileName(encryptedFile);
                 decryptFile(encryptedFile, decryptedFile, password);
-                LOGGER.info("Decrypted: {} -> {}",encryptedFile, decryptedFile);
+                System.out.println("Decrypted file: " + encryptedFile + " is " + decryptedFile);
                 try {
                     Files.delete(binFile);
-                    LOGGER.info("Deleted encrypted file: {} ", encryptedFile);
+                    System.out.println("Deleted encrypted file: " + encryptedFile);
                 } catch (IOException e) {
-                    LOGGER.error("Warning: Could not delete encrypted file: {} ({})", encryptedFile, e.getMessage());
+                    System.err.println("Warning: Could not delete encrypted file:" + encryptedFile + ", Exception: " + e.getMessage());
                 }
             }
-            LOGGER.info("Decryption completed for all .bin files.");
+            System.out.println("Decryption completed for all .bin files.");
             scanner.close();
         } catch (Exception e) {
-            LOGGER.error("Error: {}", e.getMessage());
+            System.err.println("Error: " + e.getMessage());
         }
     }
 
@@ -179,4 +176,29 @@ public class MasterDecryptor {
             return parentDir + File.separator + baseName + extension;
         }
     }
+}
+
+enum DecryptionConstants {
+
+    ALGORITHM("AES/GCM/NoPadding"),
+    KEY_LENGTH(256),
+    GCM_IV_LENGTH(12),
+    GCM_TAG_LENGTH(128),
+    SALT_LENGTH(16),
+    ITERATIONS(100000);
+
+    private final Object value;
+
+    DecryptionConstants(Object value) {
+        this.value = value;
+    }
+
+    public String getStringValue() {
+        return (String) value;
+    }
+
+    public int getIntValue() {
+        return (Integer) value;
+    }
+
 }
