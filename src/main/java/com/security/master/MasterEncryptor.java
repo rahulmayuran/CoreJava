@@ -41,7 +41,7 @@ public class MasterEncryptor {
             char[] passwordChars;
             if (console != null) {
                 // Console available - secure password input without echo
-                passwordChars = console.readPassword("Enter the decryption password: ");
+                passwordChars = console.readPassword("Enter the Encryption password: ");
             } else {
                 // Fallback for IDEs or non-interactive environments
                 System.err.println("Warning: Console not available. Password will be visible.");
